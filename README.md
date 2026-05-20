@@ -7,7 +7,7 @@
 
   [![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
   [![Django](https://img.shields.io/badge/Django-5.0%2B-092E20?logo=django&logoColor=white)](https://www.djangoproject.com/)
-  [![YOLOv8n](https://img.shields.io/badge/Model-YOLOv8n-FF6F00?logo=ultralytics&logoColor=white)](https://docs.ultralytics.com/)
+  [![YOLO 26n](https://img.shields.io/badge/Model-YOLO_26n-FF6F00?logo=ultralytics&logoColor=white)](https://docs.ultralytics.com/)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4%2B-38BDF8?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
   [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
@@ -24,7 +24,7 @@
 
 ## ✨ Premium Features
 
-- **🔍 Precision AI Detection**: Powered by a custom-trained **YOLOv8n** (Nano) model optimized for speed and accuracy. Automatically scans and draws bounding boxes around damage across 7 major vehicle zones.
+- **🔍 Precision AI Detection**: Powered by a custom-trained **YOLO 26n** (Nano) model optimized for speed and accuracy. Automatically scans and draws bounding boxes around damage across 7 major vehicle zones.
 - **💰 Dynamic Repair Costing**: Generates real-time, localized cost estimates using a robust database containing proprietary parts pricing across 10 major automotive brands (including Honda, Toyota, BMW, Hyundai, Skoda, and more).
 - **🗺️ Geolocation-Aware Garage Finder**: Instantly connects users with nearby repair facilities. Utilizes a resilient three-tier mapping architecture (Google Places API ➔ OpenStreetMap Overpass Fallback ➔ Local Demo Fallback).
 - **🎨 Glassmorphic Cockpit UI**: A state-of-the-art, dark-mode HUD interface built with Tailwind CSS. Features interactive image toggling, dynamic dropdowns, and highly responsive components.
@@ -38,7 +38,7 @@
 | :--- | :--- |
 | **Backend Framework** | Django, Python |
 | **Database** | PostgreSQL (Production via Supabase), SQLite (Local Dev) |
-| **Machine Learning** | Ultralytics YOLOv8n, PyTorch (CPU-optimized), OpenCV, Pillow |
+| **Machine Learning** | Ultralytics YOLO 26n, PyTorch (CPU-optimized), OpenCV, Pillow |
 | **Frontend Styling** | Tailwind CSS, Google Fonts (Barlow Condensed, DM Sans) |
 | **External APIs** | Google Maps JavaScript API, OpenStreetMap Overpass API |
 | **Deployment** | Render, Gunicorn, WhiteNoise |
@@ -47,7 +47,7 @@
 
 ## 🧠 AI Model & Specifications
 
-DECOR relies on a lightweight, high-speed **YOLOv8n** model, making it fast enough for real-time web inference while retaining excellent bounding box accuracy. The model detects structural and surface damage across the following classifications:
+DECOR relies on a lightweight, high-speed **YOLO 26n** model, making it fast enough for real-time web inference while retaining excellent bounding box accuracy. The model detects structural and surface damage across the following classifications:
 
 | Class Index | Class Name | Target Vehicle Part |
 |:---:|:---|:---|
@@ -69,7 +69,7 @@ DECOR relies on a lightweight, high-speed **YOLOv8n** model, making it fast enou
 graph TD
     A[User Client] -->|Upload Images & Brand/Model| B[Django Server]
     B -->|Save to PostgreSQL| C[(Supabase DB)]
-    B -->|Send Image Matrix| D[YOLOv8n AI Model]
+    B -->|Send Image Matrix| D[YOLO 26n AI Model]
     D -->|Return Box Coordinates & Classes| B
     B -->|Calculate Cost via Pricing Logic| E[Results View]
     E -->|Display Itemized Report & Garages| A
@@ -129,9 +129,9 @@ Developed with 🧡 by **Vinay Beesaboina**.
 
 ## 🏷️ Keywords & Hashtags
 
-**Keywords**: `car damage detection`, `repair for cars`, `car repair cost estimation`, `vehicle collision diagnostics`, `YOLOv8 car damage detector`, `auto body repair estimator`, `auto dent repair`, `mechanical shop finder`
+**Keywords**: `car damage detection`, `repair for cars`, `car repair cost estimation`, `vehicle collision diagnostics`, `YOLO 26n car damage detector`, `auto body repair estimator`, `auto dent repair`, `mechanical shop finder`
 
-**Hashtags**: `#CarDamageDetection` `#RepairForCars` `#AutoBodyRepair` `#CarRepairEstimate` `#YOLOv8` `#Django` `#ComputerVision` `#VehicleDiagnostics`
+**Hashtags**: `#CarDamageDetection` `#RepairForCars` `#AutoBodyRepair` `#CarRepairEstimate` `#YOLO26n` `#Django` `#ComputerVision` `#VehicleDiagnostics`
 
 ---
 
