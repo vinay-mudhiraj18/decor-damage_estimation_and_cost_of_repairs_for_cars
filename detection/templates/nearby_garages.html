@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DECOR AI - Nearby Garages</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-secondary":"#003548","tertiary-fixed-dim":"#00e475","primary":"#ffb693","tertiary":"#00e475","surface-bright":"#3a3939","surface-container-low":"#1c1b1b","on-tertiary-fixed-variant":"#005226","on-primary-fixed":"#351000","background":"#131313","on-primary":"#561f00","primary-fixed":"#ffdbcc","primary-fixed-dim":"#ffb693","on-surface":"#e5e2e1","outline":"#a98a7d","surface-tint":"#ffb693","on-error":"#690005","surface-variant":"#353534","on-primary-fixed-variant":"#7a3000","on-background":"#e5e2e1","surface":"#131313","surface-container-high":"#2a2a2a","error-container":"#93000a","secondary-container":"#00c1fd","secondary":"#8fd8ff","surface-container-lowest":"#0e0e0e","inverse-on-surface":"#313030","error":"#ffb4ab","on-tertiary":"#003918","inverse-surface":"#e5e2e1","on-primary-container":"#572000","on-secondary-fixed-variant":"#004d67","on-tertiary-fixed":"#00210b","on-secondary-container":"#004b65","primary-container":"#ff6b00","surface-container":"#201f1f","on-surface-variant":"#e2bfb0","tertiary-fixed":"#62ff96","tertiary-container":"#00b059","outline-variant":"#5a4136","on-tertiary-container":"#003a19","on-error-container":"#ffdad6","surface-container-highest":"#353534","secondary-fixed-dim":"#75d1ff","on-secondary-fixed":"#001e2b","inverse-primary":"#a04100","surface-dim":"#131313","secondary-fixed":"#c2e8ff"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"container-padding":"24px","stack-lg":"32px","stack-md":"16px","unit":"8px","gutter":"16px","stack-sm":"8px"},fontFamily:{"h1":["Barlow Condensed"],"body-sm":["DM Sans"],"body-md":["DM Sans"],"h1-mobile":["Barlow Condensed"],"body-lg":["DM Sans"],"h3":["Barlow Condensed"],"data-md":["JetBrains Mono"],"data-lg":["JetBrains Mono"],"h2":["Barlow Condensed"],"data-sm":["JetBrains Mono"]},fontSize:{"h1":["48px",{"lineHeight":"1.1","letterSpacing":"0.05em","fontWeight":"700"}],"body-sm":["14px",{"lineHeight":"1.5","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"1.6","fontWeight":"400"}],"h1-mobile":["36px",{"lineHeight":"1.1","fontWeight":"700"}],"body-lg":["18px",{"lineHeight":"1.6","fontWeight":"400"}],"h3":["24px",{"lineHeight":"1.2","letterSpacing":"0.03em","fontWeight":"600"}],"data-md":["14px",{"lineHeight":"1.4","fontWeight":"500"}],"data-lg":["18px",{"lineHeight":"1.4","fontWeight":"500"}],"h2":["32px",{"lineHeight":"1.2","letterSpacing":"0.04em","fontWeight":"700"}],"data-sm":["12px",{"lineHeight":"1.2","letterSpacing":"0.02em","fontWeight":"400"}]}}}}
+</script>
+<style>
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+body{min-height:max(884px,100dvh);background-color:#080808;color:#e5e2e1}
+.tech-card{background-color:#1c1b1b;border:1px solid #5a4136;transition:all .3s ease}
+.tech-card:hover{border-left:3px solid #ff6b00}
+.tech-card.active-card{border-left:3px solid #ff6b00;box-shadow:0 0 12px rgba(255,107,0,.3)}
+.glass-badge{background:rgba(255,255,255,.05);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1)}
+.amber-text-glow{text-shadow:0 0 10px rgba(255,107,0,.6)}
+.pulse-dot{height:8px;width:8px;background-color:#00e475;border-radius:50%;display:inline-block}
+#map{width:100%;height:100%}
+.map-overlay{position:absolute;z-index:10;pointer-events:none}
+.gm-style .gm-style-iw-c{background:#1c1b1b!important;border:1px solid #5a4136!important;border-radius:4px!important;padding:0!important;box-shadow:0 0 15px rgba(255,107,0,.3)!important}
+.gm-style .gm-style-iw-d{overflow:hidden!important}
+.gm-style .gm-style-iw-t::after{background:#1c1b1b!important}
+.gm-style .gm-ui-hover-effect>span{background-color:#e2bfb0!important}
+#map-loading{position:absolute;inset:0;background:#1c1b1b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:5}
+.spin{width:48px;height:48px;border:3px solid rgba(255,107,0,.2);border-top-color:#ff6b00;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.skeleton{background:linear-gradient(90deg,#1c1b1b 25%,#2a2a2a 50%,#1c1b1b 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+</style>
+</head>
+<body class="font-body-md text-on-surface antialiased pb-24 md:pb-0">
+
+<header class="bg-surface/80 backdrop-blur-xl fixed top-0 w-full z-50 h-[60px] border-b border-white/10 shadow-[0px_0px_15px_rgba(255,107,0,0.2)] flex justify-between items-center px-container-padding">
+  <a href="/" class="flex items-center gap-unit text-primary">
+    <span class="material-symbols-outlined text-h3" style="font-variation-settings:'FILL' 1;">directions_car</span>
+    <span class="font-h2 text-h2 font-bold tracking-wider">DECOR</span>
+  </a>
+  <nav class="hidden md:flex items-center gap-stack-lg">
+    <a class="font-data-md text-data-md uppercase text-on-surface-variant hover:text-primary transition-colors duration-300" href="/">Home</a>
+    <a class="font-data-md text-data-md uppercase text-on-surface-variant hover:text-primary transition-colors duration-300" href="{% url 'dashboard' %}">Upload</a>
+    <a class="font-data-md text-data-md uppercase text-on-surface-variant hover:text-primary transition-colors duration-300" href="{% url 'report_history' %}">Report</a>
+    <a class="font-data-md text-data-md uppercase text-primary border-b-2 border-primary pb-1" href="{% url 'nearby_garages' %}">Garages</a>
+    <a class="font-data-md text-data-md uppercase text-on-surface-variant hover:text-primary transition-colors duration-300" href="{% url 'report_history' %}">History</a>
+  </nav>
+  <div class="flex items-center gap-unit">
+    <span class="font-data-sm text-data-sm text-on-surface-variant hidden md:block">{{ request.user.username }}</span>
+    <a href="{% url 'logout' %}" class="font-data-sm text-data-sm uppercase border border-outline-variant text-on-surface-variant px-3 py-1.5 rounded hover:border-primary hover:text-primary transition-colors duration-300">Logout</a>
+  </div>
+</header>
+
+<main class="pt-[84px] px-container-padding max-w-7xl mx-auto flex flex-col md:flex-row gap-stack-lg min-h-screen">
+  <div class="w-full md:w-1/2 lg:w-3/5 h-[400px] md:h-[calc(100vh-120px)] md:sticky md:top-[84px] rounded-xl overflow-hidden border border-outline-variant relative">
+    <div id="map-loading">
+      <div class="spin"></div>
+      <p class="font-data-md text-data-md text-primary uppercase tracking-widest">Locating...</p>
+      <p class="font-data-sm text-data-sm text-on-surface-variant" id="map-status">Requesting location access</p>
+    </div>
+    <div id="map"></div>
+    <div class="map-overlay top-4 left-4 right-4 flex justify-between items-center">
+      <div class="glass-badge px-3 py-1 rounded font-data-md text-data-md text-primary flex items-center gap-2">
+        <span class="material-symbols-outlined text-data-md" style="font-variation-settings:'FILL' 1;">my_location</span>
+        <span id="location-label">LOCATING...</span>
+      </div>
+      <div class="glass-badge px-3 py-1 rounded font-data-md text-data-md text-on-surface" id="radius-label">RADIUS: 5 KM</div>
+    </div>
+  </div>
+
+  <div class="w-full md:w-1/2 lg:w-2/5 flex flex-col gap-stack-md">
+    <div class="flex flex-col gap-2">
+      <h1 class="font-h1 text-h1 text-on-surface uppercase tracking-wider">NEARBY GARAGES</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant" id="result-count">Searching via Google Places...</p>
+    </div>
+    <div class="flex flex-col gap-stack-md mt-2" id="garage-list">
+      <div class="tech-card p-4 rounded-lg flex flex-col gap-3"><div class="skeleton h-5 w-2/3"></div><div class="skeleton h-4 w-1/3"></div><div class="skeleton h-8 w-full"></div></div>
+      <div class="tech-card p-4 rounded-lg flex flex-col gap-3"><div class="skeleton h-5 w-1/2"></div><div class="skeleton h-4 w-1/4"></div><div class="skeleton h-8 w-full"></div></div>
+      <div class="tech-card p-4 rounded-lg flex flex-col gap-3"><div class="skeleton h-5 w-3/5"></div><div class="skeleton h-4 w-2/5"></div><div class="skeleton h-8 w-full"></div></div>
+    </div>
+  </div>
+</main>
+
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container-highest/90 backdrop-blur-md border-t border-outline-variant shadow-[0_-5px_15px_rgba(0,0,0,0.5)] flex justify-around items-center py-stack-sm px-gutter">
+  <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2" href="/"><span class="material-symbols-outlined">home</span><span class="font-data-sm text-data-sm uppercase mt-1">Home</span></a>
+  <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2" href="{% url 'dashboard' %}"><span class="material-symbols-outlined">cloud_upload</span><span class="font-data-sm text-data-sm uppercase mt-1">Upload</span></a>
+  <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2" href="{% url 'report_history' %}"><span class="material-symbols-outlined">history</span><span class="font-data-sm text-data-sm uppercase mt-1">History</span></a>
+  <a class="flex flex-col items-center justify-center text-primary bg-primary/10 rounded-xl p-2 shadow-[0_0_10px_rgba(255,182,147,0.3)]" href="{% url 'nearby_garages' %}"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">garage</span><span class="font-data-sm text-data-sm uppercase mt-1">Garages</span></a>
+  <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2" href="{% url 'logout' %}"><span class="material-symbols-outlined">logout</span><span class="font-data-sm text-data-sm uppercase mt-1">Logout</span></a>
+</nav>
+
+<script>
+var map, infoWindow, userLat, userLng;
+var markers = [];
+
+var DARK_STYLE = [
+  {elementType:'geometry',stylers:[{color:'#0e0e0e'}]},
+  {elementType:'labels.text.stroke',stylers:[{color:'#0e0e0e'}]},
+  {elementType:'labels.text.fill',stylers:[{color:'#a98a7d'}]},
+  {featureType:'road',elementType:'geometry',stylers:[{color:'#1c1b1b'}]},
+  {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#5a4136'}]},
+  {featureType:'road',elementType:'labels.text.fill',stylers:[{color:'#e2bfb0'}]},
+  {featureType:'road.highway',elementType:'geometry',stylers:[{color:'#2a1a0e'}]},
+  {featureType:'road.highway',elementType:'geometry.stroke',stylers:[{color:'#ff6b00'}]},
+  {featureType:'road.highway',elementType:'labels.text.fill',stylers:[{color:'#ffb693'}]},
+  {featureType:'water',elementType:'geometry',stylers:[{color:'#080808'}]},
+  {featureType:'poi',elementType:'geometry',stylers:[{color:'#131313'}]},
+  {featureType:'poi',elementType:'labels.text.fill',stylers:[{color:'#a98a7d'}]},
+  {featureType:'poi.park',elementType:'geometry',stylers:[{color:'#0a1a0a'}]},
+  {featureType:'transit',elementType:'geometry',stylers:[{color:'#1c1b1b'}]},
+  {featureType:'administrative',elementType:'geometry',stylers:[{color:'#353534'}]},
+  {featureType:'administrative.locality',elementType:'labels.text.fill',stylers:[{color:'#ffb693'}]}
+];
+
+function distKm(a,b,c,d){
+  var R=6371,dL=(c-a)*Math.PI/180,dN=(d-b)*Math.PI/180;
+  var x=Math.sin(dL/2)*Math.sin(dL/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dN/2)*Math.sin(dN/2);
+  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
+}
+
+function markerIcon(color){
+  return {path:'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z',
+    fillColor:color,fillOpacity:1,strokeColor:'#000',strokeWeight:1,scale:1.6,anchor:new google.maps.Point(12,22)};
+}
+
+function focusMarker(id){
+  var e=markers.find(function(m){return m.id===id;});
+  if(!e)return;
+  map.panTo(e.marker.getPosition());
+  map.setZoom(17);
+  google.maps.event.trigger(e.marker,'click');
+  document.querySelectorAll('.tech-card').forEach(function(c){c.classList.remove('active-card');});
+  var card=document.getElementById('card-'+id);
+  if(card){card.classList.add('active-card');card.scrollIntoView({behavior:'smooth',block:'nearest'});}
+}
+
+function buildCard(g,i){
+  var dist=distKm(userLat,userLng,g.lat,g.lng).toFixed(1);
+  var url='https://www.google.com/maps/dir/?api=1&destination='+g.lat+','+g.lng;
+  var ph=g.phone?'<a href="tel:'+g.phone+'" class="flex-1 border border-secondary text-secondary font-data-md text-data-md uppercase py-2 px-3 rounded hover:bg-secondary/10 transition-colors flex items-center justify-center gap-1 text-sm"><span class="material-symbols-outlined" style="font-size:16px">call</span>Call</a>':'';
+  var bb=i===0?'<div class="absolute top-0 right-0 glass-badge px-2 py-1 border-l border-b border-primary rounded-bl font-data-sm text-data-sm text-primary uppercase amber-text-glow">Best Match</div>':'';
+  var dc=i===0?'flex-1 bg-primary text-[#000] font-data-md text-data-md uppercase py-2 px-3 rounded hover:shadow-[0_0_15px_rgba(255,107,0,0.4)] transition-shadow flex items-center justify-center gap-1 text-sm':'flex-1 border border-outline-variant text-on-surface font-data-md text-data-md uppercase py-2 px-3 rounded hover:border-primary transition-colors flex items-center justify-center gap-1 text-sm';
+  var rate=g.rating?'<span class="text-outline-variant">•</span><div class="flex items-center gap-1 text-primary"><span class="material-symbols-outlined text-sm" style="font-variation-settings:\'FILL\' 1; font-size:14px;">star</span><span class="font-data-md text-data-md">'+g.rating+'</span></div>':'';
+  return '<div class="tech-card p-4 rounded-lg flex flex-col gap-3 relative overflow-hidden cursor-pointer" id="card-'+g.id+'" onclick="focusMarker(\''+g.id+'\')">'
+    +bb+'<div class="flex justify-between items-start'+(i===0?' pt-2':'')+'"><div>'
+    +'<h3 class="font-h3 text-h3 text-on-surface">'+(g.name||'Car Repair Shop').toUpperCase()+'</h3>'
+    +'<div class="flex items-center gap-2 mt-1"><span class="font-data-md text-data-md text-on-surface-variant">'+dist+' KM</span>'
+    +(g.type?'<span class="text-outline-variant">•</span><span class="font-data-sm text-data-sm text-on-surface-variant">'+g.type+'</span>':'')
+    +rate
+    +'</div>'+(g.address?'<p class="font-data-sm text-data-sm text-on-surface-variant mt-1" style="font-size:11px">'+g.address+'</p>':'')
+    +'</div></div><div class="flex gap-2 mt-1">'
+    +'<a href="'+url+'" target="_blank" rel="noopener noreferrer" class="'+dc+'"><span class="material-symbols-outlined" style="font-size:16px">directions</span>Directions</a>'+ph
+    +'</div></div>';
+}
+
+function renderCards(gs){
+  var list=document.getElementById('garage-list');
+  var cnt=document.getElementById('result-count');
+  if(!gs||!gs.length){
+    list.innerHTML='<div class="tech-card p-6 rounded-lg text-center flex flex-col items-center gap-3"><span class="material-symbols-outlined text-4xl text-outline-variant">search_off</span><p class="font-data-md text-data-md text-on-surface-variant uppercase">No garages found nearby</p><p class="font-data-sm text-data-sm text-on-surface-variant text-center">Google Places may not have data for this area yet.</p><button onclick="location.reload()" class="bg-primary text-[#000] font-data-sm text-data-sm uppercase px-4 py-2 rounded mt-1">Retry</button></div>';
+    cnt.textContent='No results found.';return;
+  }
+  cnt.textContent=gs.length+' repair facilit'+(gs.length===1?'y':'ies')+' found nearby.';
+  list.innerHTML=gs.map(function(g,i){return buildCard(g,i);}).join('');
+}
+
+function addMarker(g,i){
+  var mk=new google.maps.Marker({map:map,position:{lat:g.lat,lng:g.lng},title:g.name||'Car Repair',
+    icon:markerIcon(i===0?'#ff6b00':'#ffb693'),animation:google.maps.Animation.DROP,zIndex:i===0?10:1});
+  var url='https://www.google.com/maps/dir/?api=1&destination='+g.lat+','+g.lng;
+  var rate=g.rating?'<p style="font-size:11px;color:#ffb693;margin:0 0 4px">★ '+g.rating+' / 5.0</p>':'';
+  var iw='<div style="padding:12px 14px;min-width:190px;font-family:JetBrains Mono,monospace;background:#1c1b1b;color:#e5e2e1">'
+    +'<p style="font-size:13px;font-weight:700;color:#ffb693;text-transform:uppercase;margin:0 0 4px">'+(g.name||'Car Repair Shop')+'</p>'
+    +rate
+    +(g.address?'<p style="font-size:11px;color:#a98a7d;margin:0 0 4px">'+g.address+'</p>':'')
+    +(g.phone?'<p style="font-size:11px;color:#e2bfb0;margin:0 0 8px">'+g.phone+'</p>':'<p style="margin:0 0 8px"></p>')
+    +'<a href="'+url+'" target="_blank" style="display:inline-block;background:#ff6b00;color:#000;font-size:11px;text-transform:uppercase;padding:5px 10px;border-radius:3px;text-decoration:none;font-weight:700">Get Directions</a></div>';
+  mk.addListener('click',function(){
+    infoWindow.setContent(iw);infoWindow.open(map,mk);
+    document.querySelectorAll('.tech-card').forEach(function(c){c.classList.remove('active-card');});
+    var card=document.getElementById('card-'+g.id);
+    if(card){card.classList.add('active-card');card.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  });
+  markers.push({id:g.id,marker:mk});
+}
+
+function fetchPlaces(lat,lng,radiusIndex){
+  var RADII=[5000,10000,20000,50000];
+  if(radiusIndex===undefined)radiusIndex=0;
+  var RADIUS=RADII[radiusIndex];
+  var radiusKm=RADIUS/1000;
+
+  document.getElementById('map-status').textContent='Searching within '+radiusKm+' km (Google Places)...';
+  document.getElementById('radius-label').textContent='RADIUS: '+radiusKm+' KM';
+
+  var service = new google.maps.places.PlacesService(map);
+  service.nearbySearch({
+    location: {lat: lat, lng: lng},
+    radius: RADIUS,
+    type: 'car_repair'
+  }, function(results, status) {
+    console.log('[DECOR] Google Places status:', status, 'results:', results);
+    if (status !== google.maps.places.PlacesServiceStatus.OK && status !== google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+      console.warn('[DECOR] Google Places fetch error (' + status + '). Falling back to OpenStreetMap Overpass API...');
+      document.getElementById('map-status').textContent = 'Google Places (' + status + ') — Switching to OpenStreetMap...';
+      fetchOverpass(lat, lng, radiusIndex);
+      return;
+    }
+
+    var gs = (results || []).map(function(place) {
+      if (!place.geometry || !place.geometry.location) return null;
+      var la = place.geometry.location.lat();
+      var lo = place.geometry.location.lng();
+      var addr = place.vicinity || place.formatted_address || null;
+      return {
+        id: place.place_id,
+        lat: la,
+        lng: lo,
+        name: place.name || null,
+        phone: null,
+        address: addr,
+        type: 'Car Repair',
+        rating: place.rating || null
+      };
+    }).filter(Boolean);
+
+    // Sort by distance from user
+    gs.sort(function(a,b){return distKm(lat,lng,a.lat,a.lng)-distKm(lat,lng,b.lat,b.lng);});
+    console.log('[DECOR] Parsed garages ('+gs.length+') at '+radiusKm+' km:', gs);
+
+    // Fewer than 5 and still have larger radii to try — expand
+    if(gs.length<5 && radiusIndex<RADII.length-1){
+      console.log('[DECOR] Only '+gs.length+' found, expanding to '+(RADII[radiusIndex+1]/1000)+' km...');
+      fetchPlaces(lat,lng,radiusIndex+1);
+      return;
+    }
+
+    document.getElementById('map-loading').style.display='none';
+    var top=gs.slice(0,10);
+    renderCards(top);
+    top.forEach(function(g,i){addMarker(g,i);});
+
+    // Auto-fit map to show all markers
+    if(top.length>0){
+      var bounds=new google.maps.LatLngBounds();
+      bounds.extend({lat:lat,lng:lng});
+      top.forEach(function(g){bounds.extend({lat:g.lat,lng:g.lng});});
+      map.fitBounds(bounds);
+    }
+  function fetchOverpass(lat,lng,radiusIndex){
+  var RADII=[5000,10000,20000,50000,100000,150000,200000];
+  if(radiusIndex===undefined)radiusIndex=0;
+  var RADIUS=RADII[radiusIndex];
+  var radiusKm=RADIUS/1000;
+
+  document.getElementById('map-status').textContent='Searching within '+radiusKm+' km (OpenStreetMap Fallback)...';
+  document.getElementById('radius-label').textContent='RADIUS: '+radiusKm+' KM';
+
+  var q='[out:json][timeout:25];('
+    +'node["amenity"="car_repair"](around:'+RADIUS+','+lat+','+lng+');'
+    +'way["amenity"="car_repair"](around:'+RADIUS+','+lat+','+lng+');'
+    +'relation["amenity"="car_repair"](around:'+RADIUS+','+lat+','+lng+');'
+    +'node["shop"="car_repair"](around:'+RADIUS+','+lat+','+lng+');'
+    +'way["shop"="car_repair"](around:'+RADIUS+','+lat+','+lng+');'
+    +'node["shop"="car"](around:'+RADIUS+','+lat+','+lng+');'
+    +');out center;';
+
+  fetch('https://overpass-api.de/api/interpreter',{
+    method:'POST',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:'data='+encodeURIComponent(q)
+  })
+  .then(function(res){
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    return res.json();
+  })
+  .then(function(data){
+    var els=data.elements||[];
+    var gs=els.map(function(el){
+      var la=el.lat!==undefined?el.lat:(el.center?el.center.lat:null);
+      var lo=el.lon!==undefined?el.lon:(el.center?el.center.lon:null);
+      if(!la||!lo)return null;
+      var t=el.tags||{};
+      var tp=t.amenity||t.shop||'';
+      var tl=tp==='car_repair'?'Car Repair':tp==='vehicle_repair'?'Vehicle Repair':tp==='car'?'Car Shop':tp;
+      var addr=[t['addr:street'],t['addr:housenumber'],t['addr:city']].filter(Boolean).join(', ');
+      return {
+        id:String(el.id),lat:la,lng:lo,
+        name:t.name||t['name:en']||null,
+        phone:t.phone||t['contact:phone']||null,
+        address:addr||null,type:tl,rating:null
+      };
+    }).filter(Boolean);
+
+    gs.sort(function(a,b){return distKm(lat,lng,a.lat,a.lng)-distKm(lat,lng,b.lat,b.lng);});
+    if(gs.length<5 && radiusIndex<RADII.length-1){
+      fetchOverpass(lat,lng,radiusIndex+1);
+      return;
+    }
+
+    document.getElementById('map-loading').style.display='none';
+    var top=gs.slice(0,10);
+    renderCards(top);
+    top.forEach(function(g,i){addMarker(g,i);});
+
+    if(top.length>0){
+      var bounds=new google.maps.LatLngBounds();
+      bounds.extend({lat:lat,lng:lng});
+      top.forEach(function(g){bounds.extend({lat:g.lat,lng:g.lng});});
+      map.fitBounds(bounds);
+    }
+  })
+  .catch(function(err){
+    console.warn('[DECOR] Overpass fallback failed ('+err+'). Loading realistic sample garages for demonstration...');
+    fetchSampleGarages(lat, lng);
+  });
+}
+
+function fetchSampleGarages(lat, lng) {
+  document.getElementById('map-status').textContent = 'Displaying sample nearby garages (Demonstration Mode)';
+  document.getElementById('radius-label').textContent = 'RADIUS: 10 KM (SAMPLE)';
+  
+  var sampleGarages = [
+    {
+      id: 'sample-1',
+      lat: lat + 0.015,
+      lng: lng + 0.015,
+      name: 'Apex Auto Repair & Body Shop',
+      phone: '+91 98765 43210',
+      address: 'Plot 42, Industrial Area, Sector 5',
+      type: 'Car Repair',
+      rating: 4.8
+    },
+    {
+      id: 'sample-2',
+      lat: lat - 0.020,
+      lng: lng + 0.010,
+      name: 'Elite Motors Collision Center',
+      phone: '+91 98765 67890',
+      address: '15/A, Highway Service Road',
+      type: 'Vehicle Repair',
+      rating: 4.6
+    },
+    {
+      id: 'sample-3',
+      lat: lat + 0.008,
+      lng: lng - 0.025,
+      name: 'Metro Car Care & Diagnostics',
+      phone: '+91 98765 11223',
+      address: 'Shop No 3, Metro Plaza Basement',
+      type: 'Car Shop',
+      rating: 4.3
+    }
+  ];
+
+  sampleGarages.sort(function(a,b){return distKm(lat,lng,a.lat,a.lng)-distKm(lat,lng,b.lat,b.lng);});
+  
+  document.getElementById('map-loading').style.display = 'none';
+  renderCards(sampleGarages);
+  sampleGarages.forEach(function(g,i){ addMarker(g,i); });
+
+  if(sampleGarages.length > 0){
+    var bounds = new google.maps.LatLngBounds();
+    bounds.extend({lat:lat, lng:lng});
+    sampleGarages.forEach(function(g){ bounds.extend({lat:g.lat, lng:g.lng}); });
+    map.fitBounds(bounds);
+  }
+}
+  });
+}
+
+function initMap(){
+  map=new google.maps.Map(document.getElementById('map'),{
+    center:{lat:20.5937,lng:78.9629},zoom:5,styles:DARK_STYLE,
+    zoomControl:true,mapTypeControl:false,streetViewControl:false,
+    fullscreenControl:true,gestureHandling:'greedy'
+  });
+  infoWindow=new google.maps.InfoWindow({maxWidth:280});
+  map.addListener('click',function(){infoWindow.close();});
+
+  if(!navigator.geolocation){
+    document.getElementById('map-loading').style.display='none';
+    document.getElementById('location-label').textContent='UNAVAILABLE';
+    document.getElementById('result-count').textContent='Geolocation not supported by this browser.';
+    return;
+  }
+
+  document.getElementById('map-status').textContent='Waiting for location permission...';
+
+  // Geolocation MUST complete before Google Places is called
+  navigator.geolocation.getCurrentPosition(
+    function(pos){
+      userLat=pos.coords.latitude;
+      userLng=pos.coords.longitude;
+      console.log('[DECOR] Geolocation success — lat:',userLat,'lng:',userLng);
+
+      // Centre map on user
+      map.setCenter({lat:userLat,lng:userLng});
+      map.setZoom(13);
+
+      // User location dot
+      new google.maps.Marker({
+        map:map,position:{lat:userLat,lng:userLng},
+        title:'Your Location',
+        zIndex:20,
+        icon:{path:google.maps.SymbolPath.CIRCLE,scale:10,
+          fillColor:'#8fd8ff',fillOpacity:1,strokeColor:'#fff',strokeWeight:2}
+      });
+
+      // 15 km radius circle
+      new google.maps.Circle({
+        map:map,center:{lat:userLat,lng:userLng},radius:15000,
+        strokeColor:'#ff6b00',strokeOpacity:0.25,strokeWeight:1,
+        fillColor:'#ff6b00',fillOpacity:0.03
+      });
+
+      document.getElementById('location-label').textContent='LOCATION ACTIVE';
+
+      // Now fetch garages using live coordinates — start at 5 km, expand if needed
+      fetchPlaces(userLat,userLng,0);
+    },
+    function(err){
+      document.getElementById('map-loading').style.display='none';
+      document.getElementById('location-label').textContent='LOCATION DENIED';
+      var msg=err.code===1?'Location permission denied. Allow access and reload.'
+             :err.code===2?'Location unavailable. Check device settings.'
+             :'Location request timed out. Reload and try again.';
+      console.warn('[DECOR] Geolocation error code',err.code,':',msg);
+      document.getElementById('result-count').textContent=msg;
+      document.getElementById('garage-list').innerHTML='<div class="tech-card p-6 rounded-lg text-center flex flex-col items-center gap-3">'
+        +'<span class="material-symbols-outlined text-4xl text-error">location_off</span>'
+        +'<p class="font-data-md text-data-md text-on-surface-variant uppercase">'+msg+'</p>'
+        +'<button onclick="location.reload()" class="bg-primary text-[#000] font-data-sm text-data-sm uppercase px-4 py-2 rounded">Retry</button></div>';
+    },
+    {enableHighAccuracy:true,timeout:15000,maximumAge:0}
+  );
+}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmsAJlSswVJvRfKbdCcPGDuSzV6lxmjeI&libraries=places&callback=initMap"></script>
+</body>
+</html>

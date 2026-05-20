@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>DECOR - Upload</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "on-secondary": "#003548", "tertiary-fixed-dim": "#00e475", "primary": "#ffb693",
+        "tertiary": "#00e475", "surface-bright": "#3a3939", "surface-container-low": "#1c1b1b",
+        "on-tertiary-fixed-variant": "#005226", "on-primary-fixed": "#351000",
+        "background": "#131313", "on-primary": "#561f00", "primary-fixed": "#ffdbcc",
+        "primary-fixed-dim": "#ffb693", "on-surface": "#e5e2e1", "outline": "#a98a7d",
+        "surface-tint": "#ffb693", "on-error": "#690005", "surface-variant": "#353534",
+        "on-primary-fixed-variant": "#7a3000", "on-background": "#e5e2e1",
+        "surface": "#131313", "surface-container-high": "#2a2a2a",
+        "error-container": "#93000a", "secondary-container": "#00c1fd",
+        "secondary": "#8fd8ff", "surface-container-lowest": "#0e0e0e",
+        "inverse-on-surface": "#313030", "error": "#ffb4ab", "on-tertiary": "#003918",
+        "inverse-surface": "#e5e2e1", "on-primary-container": "#572000",
+        "on-secondary-fixed-variant": "#004d67", "on-tertiary-fixed": "#00210b",
+        "on-secondary-container": "#004b65", "primary-container": "#ff6b00",
+        "surface-container": "#201f1f", "on-surface-variant": "#e2bfb0",
+        "tertiary-fixed": "#62ff96", "tertiary-container": "#00b059",
+        "outline-variant": "#5a4136", "on-tertiary-container": "#003a19",
+        "on-error-container": "#ffdad6", "surface-container-highest": "#353534",
+        "secondary-fixed-dim": "#75d1ff", "on-secondary-fixed": "#001e2b",
+        "inverse-primary": "#a04100", "surface-dim": "#131313", "secondary-fixed": "#c2e8ff"
+      },
+      borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+      spacing: { "container-padding": "24px", "stack-lg": "32px", "stack-md": "16px", "unit": "8px", "gutter": "16px", "stack-sm": "8px" },
+      fontFamily: {
+        "h1": ["Barlow Condensed"], "body-sm": ["DM Sans"], "body-md": ["DM Sans"],
+        "h1-mobile": ["Barlow Condensed"], "body-lg": ["DM Sans"], "h3": ["Barlow Condensed"],
+        "data-md": ["JetBrains Mono"], "data-lg": ["JetBrains Mono"],
+        "h2": ["Barlow Condensed"], "data-sm": ["JetBrains Mono"]
+      },
+      fontSize: {
+        "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "0.05em", "fontWeight": "700"}],
+        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+        "h1-mobile": ["36px", {"lineHeight": "1.1", "fontWeight": "700"}],
+        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+        "h3": ["24px", {"lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600"}],
+        "data-md": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+        "data-lg": ["18px", {"lineHeight": "1.4", "fontWeight": "500"}],
+        "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.04em", "fontWeight": "700"}],
+        "data-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "400"}]
+      }
+    }
+  }
+}
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { min-height: max(884px, 100dvh); }
+  #drop-zone.drag-over { border-color: #ffb693; background-color: rgba(255,182,147,0.05); }
+</style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col pb-24 md:pb-0 pt-[60px]">
+
+<!-- TopAppBar -->
+<header class="bg-surface/80 backdrop-blur-xl fixed top-0 w-full z-50 h-[60px] border-b border-white/10 shadow-[0px_0px_15px_rgba(255,107,0,0.2)] flex justify-between items-center px-container-padding">
+  <a href="/" class="flex items-center gap-unit text-primary">
+    <span class="material-symbols-outlined text-h3" style="font-variation-settings:'FILL' 1;">directions_car</span>
+    <span class="font-h2 text-h2 font-bold tracking-wider">DECOR</span>
+  </a>
+  <nav class="hidden md:flex items-center gap-stack-lg">
+    <a class="font-data-md text-data-md uppercase text-on-surface-variant hover:text-primary transition-colors duration-300" href="/">Home</a>
+    <a class="font-data-md text-data-md uppercase text-primary border-b-2 border-primary pb-1" href="{% url 'dashboard' %}">Upload</a>
+    <a class="font-data-md text-data-md uppercase text-on-surface-variant hover:text-primary transition-colors duration-300" href="{% url 'report_history' %}">Report</a>
+    <a class="font-data-md text-data-md uppercase text-on-surface-variant hover:text-primary transition-colors duration-300" href="{% url 'nearby_garages' %}">Garages</a>
+    <a class="font-data-md text-data-md uppercase text-on-surface-variant hover:text-primary transition-colors duration-300" href="{% url 'report_history' %}">History</a>
+  </nav>
+  <div class="flex items-center gap-unit">
+    <span class="font-data-sm text-data-sm text-on-surface-variant hidden md:block">{{ request.user.username }}</span>
+    <a href="{% url 'logout' %}" class="font-data-sm text-data-sm uppercase border border-outline-variant text-on-surface-variant px-3 py-1.5 rounded hover:border-primary hover:text-primary transition-colors duration-300">Logout</a>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-container-padding py-stack-lg">
+  <div class="mb-stack-lg">
+    <h1 class="font-h1 text-h1 text-on-surface uppercase tracking-wider mb-unit">Initialize Inspection</h1>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">Upload imagery and define parameters for AI diagnostic protocol.</p>
+  </div>
+
+  <!-- Django messages -->
+  {% if messages %}
+  <div class="mb-stack-md space-y-2">
+    {% for message in messages %}
+    <div class="bg-error-container/30 border border-error text-error font-data-sm text-data-sm px-3 py-2 rounded flex items-center gap-2">
+      <span class="material-symbols-outlined text-[16px]">error</span>
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <form method="POST" enctype="multipart/form-data" id="upload-form" action="{% url 'dashboard' %}">
+    {% csrf_token %}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+
+      <!-- Left: Drop Zone -->
+      <section class="lg:col-span-7 bg-surface-container-low border border-outline-variant rounded-xl p-stack-md flex flex-col min-h-[400px]">
+        <div class="flex items-center justify-between mb-stack-md border-b border-outline-variant/30 pb-unit">
+          <h2 class="font-h3 text-h3 text-on-surface uppercase tracking-wide">Image Telemetry</h2>
+          <span id="status-badge" class="font-data-sm text-data-sm text-primary uppercase bg-white/5 border border-primary/30 px-2 py-1 rounded backdrop-blur-md">Status: Awaiting Feed</span>
+        </div>
+
+        <!-- Drop Area -->
+        <div id="drop-zone"
+          class="flex-grow border-2 border-dashed border-outline-variant hover:border-primary transition-colors rounded-lg flex flex-col items-center justify-center relative overflow-hidden bg-background cursor-pointer"
+          onclick="document.getElementById('images').click()">
+          <!-- Radar rings -->
+          <div class="absolute w-[200%] h-[200%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-20">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full border border-primary"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full border border-primary"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full border border-primary"></div>
+          </div>
+          <div id="drop-content" class="z-10 flex flex-col items-center">
+            <span class="material-symbols-outlined text-6xl text-on-surface-variant mb-stack-sm drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]">upload</span>
+            <p class="font-h2 text-h2 text-on-surface uppercase tracking-widest text-center">Drop Image Here</p>
+            <p class="font-data-md text-data-md text-on-surface-variant mt-unit">or click to browse local storage</p>
+            <p class="font-data-sm text-data-sm text-on-surface-variant/50 mt-2">JPG, JPEG, PNG supported</p>
+          </div>
+          <!-- Full-area preview (shown after file selection) -->
+          <div id="preview-container" class="hidden absolute inset-0 z-10 w-full h-full">
+            <img id="preview-img" src="" alt="Preview" class="w-full h-full object-contain" style="display:block;">
+            <!-- Multi-image counter badge -->
+            <div id="preview-badge" class="hidden absolute bottom-3 right-3 bg-background/80 border border-outline-variant text-on-surface font-data-sm text-data-sm px-2 py-1 rounded backdrop-blur-md"></div>
+          </div>
+          <!-- Scanner line (decorative) -->
+          <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
+        </div>
+
+        <!-- Hidden file input -->
+        <input type="file" id="images" name="images" accept=".jpg,.jpeg,.png" multiple class="hidden">
+      </section>
+
+      <!-- Right: Vehicle Parameters -->
+      <section class="lg:col-span-5 bg-surface-container border border-outline-variant rounded-xl p-stack-md flex flex-col">
+        <div class="flex items-center justify-between mb-stack-md border-b border-outline-variant/30 pb-unit">
+          <h2 class="font-h3 text-h3 text-on-surface uppercase tracking-wide">Vehicle Parameters</h2>
+          <span class="material-symbols-outlined text-on-surface-variant">tune</span>
+        </div>
+        <div class="flex-grow flex flex-col gap-stack-md">
+
+          <!-- Brand -->
+          <div class="flex flex-col gap-unit">
+            <label class="font-data-sm text-data-sm text-on-surface-variant uppercase" for="carBrand">Manufacturer</label>
+            <div class="relative">
+              <select id="carBrand" name="carBrand"
+                class="w-full bg-background border border-outline-variant rounded p-3 font-data-md text-data-md text-on-surface appearance-none focus:border-primary focus:outline-none focus:shadow-[0_2px_0_0_#ff6b00]">
+                <option value="" disabled selected>Select Brand...</option>
+                {% for brand in brands %}
+                <option value="{{ brand }}">{{ brand }}</option>
+                {% endfor %}
+              </select>
+              <span class="material-symbols-outlined absolute right-3 top-3 text-on-surface-variant pointer-events-none">expand_more</span>
+            </div>
+          </div>
+
+          <!-- Model (populated dynamically) -->
+          <div class="flex flex-col gap-unit">
+            <label class="font-data-sm text-data-sm text-on-surface-variant uppercase" for="carModel">Model Designation</label>
+            <div class="relative">
+              <select id="carModel" name="carModel"
+                class="w-full bg-background border border-outline-variant rounded p-3 font-data-md text-data-md text-on-surface appearance-none focus:border-primary focus:outline-none focus:shadow-[0_2px_0_0_#ff6b00]">
+                <option value="" disabled selected>Select Brand First...</option>
+              </select>
+              <span class="material-symbols-outlined absolute right-3 top-3 text-on-surface-variant pointer-events-none">expand_more</span>
+            </div>
+          </div>
+
+          <!-- Loading overlay (shown on submit) -->
+          <div id="loading-overlay" class="hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center gap-stack-md">
+            <div class="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+            <p class="font-data-lg text-data-lg text-primary uppercase tracking-widest">Analysing Damage...</p>
+            <p class="font-data-sm text-data-sm text-on-surface-variant">Neural network processing imagery</p>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" id="analyse-btn"
+            class="mt-auto w-full bg-primary text-[#000] font-h3 text-h3 py-4 rounded hover:bg-primary-container hover:text-on-primary transition-all duration-300 shadow-[0px_0px_15px_rgba(255,107,0,0.4)] flex items-center justify-center gap-unit uppercase">
+            <span class="material-symbols-outlined">radar</span>
+            Analyse Damage
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </form>
+</main>
+
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden bg-surface-container-highest/90 backdrop-blur-md font-data-sm text-data-sm uppercase fixed bottom-0 w-full z-50 rounded-t-xl border-t border-outline-variant shadow-[0_-5px_15px_rgba(0,0,0,0.5)] flex justify-around items-center py-stack-sm px-gutter">
+  <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 transition-all" href="/">
+    <span class="material-symbols-outlined mb-1">home</span>Home
+  </a>
+  <a class="flex flex-col items-center justify-center text-primary bg-primary/10 rounded-xl p-2 shadow-[0_0_10px_rgba(255,182,147,0.3)] scale-105" href="{% url 'dashboard' %}">
+    <span class="material-symbols-outlined mb-1" style="font-variation-settings:'FILL' 1;">cloud_upload</span>Upload
+  </a>
+  <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 transition-all" href="{% url 'report_history' %}">
+    <span class="material-symbols-outlined mb-1">history</span>History
+  </a>
+  <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 transition-all" href="{% url 'nearby_garages' %}">
+    <span class="material-symbols-outlined mb-1">garage</span>Garages
+  </a>
+  <a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 transition-all" href="{% url 'logout' %}">
+    <span class="material-symbols-outlined mb-1">logout</span>Logout
+  </a>
+</nav>
+
+<script>
+// Brand → Model dynamic population from DB data
+const brandModels = {{ brand_models|safe }};
+
+document.getElementById('carBrand').addEventListener('change', function () {
+  const brand = this.value;
+  const modelSelect = document.getElementById('carModel');
+  modelSelect.innerHTML = '<option value="" disabled selected>Select Model...</option>';
+  const models = [...new Set(brandModels.filter(m => m.brand === brand).map(m => m.model))];
+  models.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.textContent = m;
+    modelSelect.appendChild(opt);
+  });
+});
+
+// File input + drag-and-drop with image preview
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('images');
+const dropContent = document.getElementById('drop-content');
+const previewContainer = document.getElementById('preview-container');
+const previewImg = document.getElementById('preview-img');
+const previewBadge = document.getElementById('preview-badge');
+const statusBadge = document.getElementById('status-badge');
+
+function handleFiles(files) {
+  if (!files.length) return;
+
+  // Show the first image filling the entire drop zone
+  const reader = new FileReader();
+  reader.onload = e => {
+    previewImg.src = e.target.result;
+    previewContainer.classList.remove('hidden');
+    dropContent.classList.add('hidden');
+  };
+  reader.readAsDataURL(files[0]);
+
+  // Show a badge when multiple images are selected
+  if (files.length > 1) {
+    previewBadge.textContent = `+${files.length - 1} more image${files.length > 2 ? 's' : ''}`;
+    previewBadge.classList.remove('hidden');
+  } else {
+    previewBadge.classList.add('hidden');
+  }
+
+  statusBadge.textContent = `Status: ${files.length} Image${files.length > 1 ? 's' : ''} Loaded`;
+}
+
+fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const dt = new DataTransfer();
+  Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+  fileInput.files = dt.files;
+  handleFiles(fileInput.files);
+});
+
+// Validate and show loading overlay on submit
+document.getElementById('upload-form').addEventListener('submit', function (e) {
+  const brand = document.getElementById('carBrand').value;
+  const model = document.getElementById('carModel').value;
+  const files = fileInput.files;
+  if (!brand || !model) {
+    e.preventDefault();
+    alert('Please select a manufacturer and model before analysing.');
+    return;
+  }
+  if (!files.length) {
+    e.preventDefault();
+    alert('Please upload at least one image.');
+    return;
+  }
+  document.getElementById('loading-overlay').classList.remove('hidden');
+});
+</script>
+</body>
+</html>

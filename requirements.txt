@@ -1,0 +1,8 @@
+django
+python-dotenv
+mysql-connector-python
+ultralytics
+pillow
+opencv-python-headless
+torch
+torchvision

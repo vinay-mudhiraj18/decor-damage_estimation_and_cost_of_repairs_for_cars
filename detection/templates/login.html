@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DECOR AI - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "on-secondary": "#003548", "tertiary-fixed-dim": "#00e475", "primary": "#ffb693",
+        "tertiary": "#00e475", "surface-bright": "#3a3939", "surface-container-low": "#1c1b1b",
+        "on-tertiary-fixed-variant": "#005226", "on-primary-fixed": "#351000",
+        "background": "#131313", "on-primary": "#561f00", "primary-fixed": "#ffdbcc",
+        "primary-fixed-dim": "#ffb693", "on-surface": "#e5e2e1", "outline": "#a98a7d",
+        "surface-tint": "#ffb693", "on-error": "#690005", "surface-variant": "#353534",
+        "on-primary-fixed-variant": "#7a3000", "on-background": "#e5e2e1",
+        "surface": "#131313", "surface-container-high": "#2a2a2a",
+        "error-container": "#93000a", "secondary-container": "#00c1fd",
+        "secondary": "#8fd8ff", "surface-container-lowest": "#0e0e0e",
+        "inverse-on-surface": "#313030", "error": "#ffb4ab", "on-tertiary": "#003918",
+        "inverse-surface": "#e5e2e1", "on-primary-container": "#572000",
+        "on-secondary-fixed-variant": "#004d67", "on-tertiary-fixed": "#00210b",
+        "on-secondary-container": "#004b65", "primary-container": "#ff6b00",
+        "surface-container": "#201f1f", "on-surface-variant": "#e2bfb0",
+        "tertiary-fixed": "#62ff96", "tertiary-container": "#00b059",
+        "outline-variant": "#5a4136", "on-tertiary-container": "#003a19",
+        "on-error-container": "#ffdad6", "surface-container-highest": "#353534",
+        "secondary-fixed-dim": "#75d1ff", "on-secondary-fixed": "#001e2b",
+        "inverse-primary": "#a04100", "surface-dim": "#131313", "secondary-fixed": "#c2e8ff"
+      },
+      borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+      spacing: { "container-padding": "24px", "stack-lg": "32px", "stack-md": "16px", "unit": "8px", "gutter": "16px", "stack-sm": "8px" },
+      fontFamily: { "h1": ["Barlow Condensed"], "body-sm": ["DM Sans"], "body-md": ["DM Sans"], "h1-mobile": ["Barlow Condensed"], "body-lg": ["DM Sans"], "h3": ["Barlow Condensed"], "data-md": ["JetBrains Mono"], "data-lg": ["JetBrains Mono"], "h2": ["Barlow Condensed"], "data-sm": ["JetBrains Mono"] },
+      fontSize: {
+        "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "0.05em", "fontWeight": "700"}],
+        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+        "h1-mobile": ["36px", {"lineHeight": "1.1", "fontWeight": "700"}],
+        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+        "h3": ["24px", {"lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600"}],
+        "data-md": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+        "data-lg": ["18px", {"lineHeight": "1.4", "fontWeight": "500"}],
+        "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.04em", "fontWeight": "700"}],
+        "data-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "400"}]
+      }
+    }
+  }
+}
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { min-height: max(884px, 100dvh); }
+</style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<main class="flex-grow flex w-full">
+  <!-- Left Panel -->
+  <div class="hidden md:flex md:w-1/2 relative flex-col justify-end p-container-padding bg-surface-container-highest overflow-hidden">
+    <div class="absolute inset-0">
+      <img alt="Car assembly line" class="w-full h-full object-cover opacity-30 grayscale"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuANXXYmgF1cjZ_TeG4Yn1DAFjxdrUVwetEjlnuOFTT-D-zbJBm4APl1KhAZlz5l0vHpxw474ZUbKIAFlsN36GCxFOV17-YU8Kp4QURrMW5iapojCrA2EFPnHl4KPd9Ya94E1w7YGNVozTd70m8P7xoX9lI9L5XFgjsdB5I_R2DSEUHZDOyt1cESCXQKRZOBAUpbSJbD0sjlmZ39grkq9FcpSUAaaw8XnRGkLjKzeLUGFKwrJvoBzCnHqqnzHvfX_342ake5O1Jm6iw"/>
+      <div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
+    </div>
+    <div class="relative z-10 max-w-md space-y-stack-md">
+      <h1 class="font-h1 text-h1 text-primary-fixed-dim drop-shadow-[0_0_15px_rgba(255,107,0,0.3)]">DECOR AI</h1>
+      <div class="h-[2px] w-16 bg-gradient-to-r from-primary-container to-transparent"></div>
+      <p class="font-data-lg text-data-lg text-on-surface-variant tracking-wider uppercase">
+        AI-powered automotive damage detection.
+      </p>
+      <div class="flex items-center gap-unit text-on-surface-variant/50 font-data-sm text-data-sm mt-stack-lg">
+        <span class="material-symbols-outlined">memory</span>
+        <span>System Status: Optimal</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel: Form -->
+  <div class="w-full md:w-1/2 flex items-center justify-center p-container-padding bg-background relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-primary-container/5 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="w-full max-w-sm space-y-stack-lg relative z-10">
+      <div class="space-y-unit md:hidden">
+        <h1 class="font-h1-mobile text-h1-mobile text-primary-fixed-dim">DECOR AI</h1>
+        <div class="h-[2px] w-12 bg-gradient-to-r from-primary-container to-transparent"></div>
+      </div>
+      <div>
+        <h2 class="font-h2 text-h2 text-on-surface">WELCOME BACK</h2>
+        <p class="font-body-sm text-body-sm text-on-surface-variant mt-unit">Authenticate to access diagnostics terminal.</p>
+      </div>
+
+      <!-- Django messages -->
+      {% if messages %}
+      <div class="space-y-2">
+        {% for message in messages %}
+        <div class="bg-error-container/30 border border-error text-error font-data-sm text-data-sm px-3 py-2 rounded flex items-center gap-2">
+          <span class="material-symbols-outlined text-[16px]">error</span>
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="POST" action="{% url 'login' %}" class="space-y-stack-md">
+        {% csrf_token %}
+        <div class="space-y-unit">
+          <label class="block font-data-sm text-data-sm text-on-surface-variant uppercase tracking-wider" for="username">Username</label>
+          <div class="relative group">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant group-focus-within:text-primary-fixed-dim transition-colors">person</span>
+            <input class="w-full bg-surface-container-low border border-outline text-on-surface font-data-md text-data-md rounded pl-10 pr-4 py-3 focus:ring-0 focus:border-primary-container focus:shadow-[0_2px_0_0_#ff6b00] transition-all placeholder:text-on-surface-variant/30"
+              id="username" name="username" placeholder="your_username" required type="text" autocomplete="username"/>
+          </div>
+        </div>
+        <div class="space-y-unit">
+          <div class="flex justify-between items-end">
+            <label class="block font-data-sm text-data-sm text-on-surface-variant uppercase tracking-wider" for="password">Password</label>
+          </div>
+          <div class="relative group">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant group-focus-within:text-primary-fixed-dim transition-colors">key</span>
+            <input class="w-full bg-surface-container-low border border-outline text-on-surface font-data-md text-data-md rounded pl-10 pr-4 py-3 focus:ring-0 focus:border-primary-container focus:shadow-[0_2px_0_0_#ff6b00] transition-all placeholder:text-on-surface-variant/30"
+              id="password" name="password" placeholder="••••••••" required type="password" autocomplete="current-password"/>
+          </div>
+        </div>
+        <div class="pt-unit">
+          <button class="w-full bg-primary-container text-background font-data-lg text-data-lg uppercase py-3 rounded flex items-center justify-center gap-unit hover:bg-primary-fixed-dim hover:shadow-[0_0_15px_rgba(255,107,0,0.4)] transition-all group relative overflow-hidden" type="submit">
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+            <span>Sign In</span>
+            <span class="material-symbols-outlined opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300">arrow_forward</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="text-center">
+        <p class="font-body-sm text-body-sm text-on-surface-variant">
+          New here? <a class="text-secondary hover:text-secondary-fixed transition-colors hover:underline underline-offset-4" href="{% url 'register' %}">Create free account</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

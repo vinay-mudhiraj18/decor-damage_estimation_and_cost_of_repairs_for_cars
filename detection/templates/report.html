@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DECOR AI - Damage Report</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=DM+Sans:wght@400;500&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#003548",
+                        "tertiary-fixed-dim": "#00e475",
+                        "primary": "#ffb693",
+                        "tertiary": "#00e475",
+                        "surface-bright": "#3a3939",
+                        "surface-container-low": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#005226",
+                        "on-primary-fixed": "#351000",
+                        "background": "#131313",
+                        "on-primary": "#561f00",
+                        "primary-fixed": "#ffdbcc",
+                        "primary-fixed-dim": "#ffb693",
+                        "on-surface": "#e5e2e1",
+                        "outline": "#a98a7d",
+                        "surface-tint": "#ffb693",
+                        "on-error": "#690005",
+                        "surface-variant": "#353534",
+                        "on-primary-fixed-variant": "#7a3000",
+                        "on-background": "#e5e2e1",
+                        "surface": "#131313",
+                        "surface-container-high": "#2a2a2a",
+                        "error-container": "#93000a",
+                        "secondary-container": "#00c1fd",
+                        "secondary": "#8fd8ff",
+                        "surface-container-lowest": "#0e0e0e",
+                        "inverse-on-surface": "#313030",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#003918",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary-container": "#572000",
+                        "on-secondary-fixed-variant": "#004d67",
+                        "on-tertiary-fixed": "#00210b",
+                        "on-secondary-container": "#004b65",
+                        "primary-container": "#ff6b00",
+                        "surface-container": "#201f1f",
+                        "on-surface-variant": "#e2bfb0",
+                        "tertiary-fixed": "#62ff96",
+                        "tertiary-container": "#00b059",
+                        "outline-variant": "#5a4136",
+                        "on-tertiary-container": "#003a19",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#353534",
+                        "secondary-fixed-dim": "#75d1ff",
+                        "on-secondary-fixed": "#001e2b",
+                        "inverse-primary": "#a04100",
+                        "surface-dim": "#131313",
+                        "secondary-fixed": "#c2e8ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-padding": "24px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "unit": "8px",
+                        "gutter": "16px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "h1": ["Barlow Condensed"],
+                        "body-sm": ["DM Sans"],
+                        "body-md": ["DM Sans"],
+                        "h1-mobile": ["Barlow Condensed"],
+                        "body-lg": ["DM Sans"],
+                        "h3": ["Barlow Condensed"],
+                        "data-md": ["JetBrains Mono"],
+                        "data-lg": ["JetBrains Mono"],
+                        "h2": ["Barlow Condensed"],
+                        "data-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "h1": ["48px", { "lineHeight": "1.1", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "h1-mobile": ["36px", { "lineHeight": "1.1", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "h3": ["24px", { "lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600" }],
+                        "data-md": ["14px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "data-lg": ["18px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "h2": ["32px", { "lineHeight": "1.2", "letterSpacing": "0.04em", "fontWeight": "700" }],
+                        "data-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .tech-bg-grid {
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .glow-border-amber {
+            box-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
+        }
+        .glow-text-amber {
+            text-shadow: 0 0 8px rgba(255, 107, 0, 0.5);
+        }
+        .scanner-line {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #ffb693, transparent);
+            box-shadow: 0 0 15px rgba(255, 182, 147, 0.8);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col pt-[60px] pb-[80px] md:pb-0 tech-bg-grid">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 h-[60px] bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-white/10 shadow-[0px_0px_15px_rgba(255,107,0,0.2)] flex justify-between items-center px-container-padding max-w-full mx-auto">
+<div class="flex items-center gap-gutter">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim text-h3 cursor-none active:scale-95 transition-transform" data-icon="directions_car">directions_car</span>
+<span class="font-h2 text-h2 font-bold text-primary dark:text-primary-fixed-dim tracking-wider">DECOR</span>
+</div>
+<!-- Desktop Nav Placeholder (Hidden on Mobile) -->
+<nav class="hidden md:flex gap-stack-lg items-center">
+<a class="text-on-surface-variant dark:text-on-surface-variant font-data-sm text-data-sm uppercase hover:text-primary transition-colors duration-300" href="#">Home</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant font-data-sm text-data-sm uppercase hover:text-primary transition-colors duration-300" href="#">Upload</a>
+<a class="text-primary dark:text-primary border-b-2 border-primary pb-1 font-data-sm text-data-sm uppercase" href="#">Report</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant font-data-sm text-data-sm uppercase hover:text-primary transition-colors duration-300" href="#">Garages</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant font-data-sm text-data-sm uppercase hover:text-primary transition-colors duration-300" href="#">History</a>
+</nav>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">person</span>
+</div>
+</header>
+<main class="flex-grow w-full max-w-7xl mx-auto px-container-padding py-stack-lg flex flex-col gap-stack-lg">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-md border-b border-outline-variant pb-stack-md">
+<div>
+<p class="font-data-sm text-data-sm text-primary-fixed-dim mb-unit flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">fingerprint</span>
+                    REPORT ID: AI-8834-V2
+                </p>
+<h1 class="font-h1-mobile md:font-h1 text-h1-mobile md:text-h1 text-on-surface">DAMAGE REPORT</h1>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-data-sm text-data-sm text-on-surface-variant uppercase">Overall Condition:</span>
+<div class="px-3 py-1 rounded bg-white/5 border border-[#ffb4ab] text-[#ffb4ab] font-data-sm text-data-sm uppercase tracking-wider backdrop-blur-md">
+                    POOR
+                </div>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Annotated Image -->
+<div class="lg:col-span-8 flex flex-col gap-stack-md">
+<div class="bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden relative group">
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 pointer-events-none"></div>
+<!-- Scanner Animation Overlay -->
+<div class="absolute top-1/3 left-0 w-full z-20 scanner-line"></div>
+<!-- Main Image Placeholder -->
+<div class="w-full h-[400px] md:h-[600px] bg-surface-container flex items-center justify-center relative bg-cover bg-center" data-alt="A highly detailed close-up shot of a modern car's front quarter panel showing significant collision damage and scraped paint under stark, clinical laboratory lighting. The setting is an industrial inspection bay with a Tech-Noir aesthetic. The color palette relies on deep layered blacks, sleek metallic silver of the car body, and subtle reflections. The mood is precise, authoritative, and analytical, suited for an AI damage assessment interface." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3NdBkKHhMJd47XS28wv4TsduWApKucl5SKdCnpTIPH04JszS-Xs5KM3Jary3GYlWCEUADB_9yAtXX_xEB0MZlwT2B50ARXzYY9ZC8HUfPvJl1bqB48AWyXu7H-OiBuQ-z4EI4kk34RqrQ7zOkHf7H2Dhzh_j32NHKxjXFKUGm-T_JPK50znM06NuIzAEDfrrACaq6Y1ZxiFMDNW8mwsRXcx0w13iyMzYTUtEWkT06xyceOLgpjuPB17LH4knRqFxtmOIFUZI7SNU')">
+<!-- Bounding Boxes -->
+<div class="absolute top-[20%] left-[30%] w-[150px] h-[100px] border-2 border-[#ffb4ab] bg-[#ffb4ab]/10 z-30 cursor-crosshair group/box">
+<div class="absolute -top-6 -left-[2px] bg-[#ffb4ab] text-[#690005] font-data-sm text-[10px] px-2 py-0.5 uppercase">Front Bumper</div>
+<div class="hidden group-hover/box:block absolute top-full left-0 mt-2 w-48 bg-surface-container-high border border-[#ffb4ab] p-2 text-data-sm text-on-surface shadow-lg z-40">
+                                Severity: HIGH<br/>Cost: ₹8,500 - ₹12,000
+                            </div>
+</div>
+<div class="absolute top-[40%] left-[55%] w-[120px] h-[80px] border-2 border-primary bg-primary/10 z-30 cursor-crosshair group/box">
+<div class="absolute -top-6 -left-[2px] bg-primary text-[#561f00] font-data-sm text-[10px] px-2 py-0.5 uppercase">Hood Panel</div>
+<div class="hidden group-hover/box:block absolute top-full left-0 mt-2 w-48 bg-surface-container-high border border-primary p-2 text-data-sm text-on-surface shadow-lg z-40">
+                                Severity: MODERATE<br/>Cost: ₹4,000 - ₹7,000
+                            </div>
+</div>
+<div class="absolute top-[60%] left-[10%] w-[90px] h-[70px] border-2 border-secondary bg-secondary/10 z-30 cursor-crosshair group/box">
+<div class="absolute -top-6 -left-[2px] bg-secondary text-[#001e2b] font-data-sm text-[10px] px-2 py-0.5 uppercase">Headlight L</div>
+<div class="hidden group-hover/box:block absolute top-full left-0 mt-2 w-48 bg-surface-container-high border border-secondary p-2 text-data-sm text-on-surface shadow-lg z-40">
+                                Severity: LOW<br/>Cost: ₹2,000 - ₹3,000
+                            </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Details & Summary -->
+<div class="lg:col-span-4 flex flex-col gap-stack-md">
+<!-- Cost Summary -->
+<div class="bg-surface-container-low border border-primary p-stack-md rounded-xl glow-border-amber relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 blur-2xl rounded-full"></div>
+<p class="font-data-sm text-data-sm text-primary uppercase mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">calculate</span>
+                        Estimated Repair Cost
+                    </p>
+<h2 class="font-data-lg text-[28px] text-on-surface leading-tight font-bold glow-text-amber">₹14,500 – ₹22,000</h2>
+<p class="font-data-sm text-data-sm text-on-surface-variant mt-2 opacity-70">Accuracy Confidence: 94.2%</p>
+</div>
+<!-- Damage List -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl flex flex-col">
+<div class="p-4 border-b border-outline-variant/50 bg-surface/50">
+<h3 class="font-h3 text-h3 text-on-surface text-lg">ZONAL BREAKDOWN</h3>
+</div>
+<div class="p-4 flex flex-col gap-4">
+<!-- Item 1: High -->
+<div class="flex items-start justify-between border-l-2 border-[#ffb4ab] pl-3 hover:bg-surface/50 transition-colors p-2 -ml-2 rounded-r">
+<div>
+<h4 class="font-body-md text-body-md text-on-surface font-medium flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-[#ffb4ab] shadow-[0_0_5px_#ffb4ab]"></div>
+                                    Front Bumper Assembly
+                                </h4>
+<p class="font-data-sm text-[11px] text-on-surface-variant mt-1">Deep structural crack detected.</p>
+</div>
+<div class="text-right">
+<span class="font-data-md text-data-md text-[#ffb4ab]">₹8.5K - ₹12K</span>
+</div>
+</div>
+<!-- Item 2: Med -->
+<div class="flex items-start justify-between border-l-2 border-primary pl-3 hover:bg-surface/50 transition-colors p-2 -ml-2 rounded-r">
+<div>
+<h4 class="font-body-md text-body-md text-on-surface font-medium flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_5px_#ffb693]"></div>
+                                    Hood Panel
+                                </h4>
+<p class="font-data-sm text-[11px] text-on-surface-variant mt-1">Surface scratching &amp; denting.</p>
+</div>
+<div class="text-right">
+<span class="font-data-md text-data-md text-primary">₹4K - ₹7K</span>
+</div>
+</div>
+<!-- Item 3: Low -->
+<div class="flex items-start justify-between border-l-2 border-secondary pl-3 hover:bg-surface/50 transition-colors p-2 -ml-2 rounded-r">
+<div>
+<h4 class="font-body-md text-body-md text-on-surface font-medium flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_5px_#8fd8ff]"></div>
+                                    Left Headlight Casing
+                                </h4>
+<p class="font-data-sm text-[11px] text-on-surface-variant mt-1">Minor scuffing, no fracture.</p>
+</div>
+<div class="text-right">
+<span class="font-data-md text-data-md text-secondary">₹2K - ₹3K</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Assessment Notes -->
+<div class="bg-surface-container bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] border border-outline-variant p-4 rounded-xl">
+<div class="flex items-center gap-2 mb-3 border-b border-outline-variant/50 pb-2">
+<span class="material-symbols-outlined text-primary text-[18px]">memory</span>
+<h3 class="font-data-sm text-data-sm text-primary uppercase">AI Assessment Details</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                        Computer vision models detect a 14cm structural fracture on the primary lower front bumper fascia. Recommended replacement over repair due to material stress. Paint matching required for hood panel scuffs. Sensor arrays behind bumper appear intact but require physical diagnostic verification.
+                    </p>
+</div>
+<!-- Actions -->
+<div class="flex gap-4 mt-auto pt-4">
+<button class="flex-1 bg-transparent border border-secondary text-secondary font-data-md text-data-md py-3 rounded-lg hover:bg-secondary/10 transition-colors uppercase flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">share</span>
+                        Share
+                    </button>
+<button class="flex-1 bg-primary text-[#000] font-data-md text-data-md py-3 rounded-lg hover:shadow-[0_0_15px_rgba(255,107,0,0.4)] transition-shadow uppercase font-bold flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">garage</span>
+                        Find Garage
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container-highest/90 dark:bg-surface-container-highest/90 backdrop-blur-md border-t border-outline-variant shadow-[0_-5px_15px_rgba(0,0,0,0.5)] fixed bottom-0 left-0 w-full flex justify-around items-center py-stack-sm px-gutter">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-data-sm text-data-sm uppercase mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="cloud_upload">cloud_upload</span>
+<span class="font-data-sm text-data-sm uppercase mt-1">Upload</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary/10 rounded-xl p-2 shadow-[0_0_10px_rgba(255,182,147,0.3)]" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-data-sm text-data-sm uppercase mt-1">Report</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="garage">garage</span>
+<span class="font-data-sm text-data-sm uppercase mt-1">Garages</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-data-sm text-data-sm uppercase mt-1">History</span>
+</a>
+</nav>
+<!-- Footer -->
+<footer class="w-full py-stack-lg bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center px-container-padding gap-stack-md mt-auto hidden md:flex">
+<div class="font-h3 text-h3 text-primary tracking-wider font-bold">DECOR</div>
+<div class="font-data-sm text-data-sm text-on-surface-variant">© 2024 DECOR AI. ALL RIGHTS RESERVED.</div>
+<div class="flex gap-gutter">
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Terms of Service</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Legal</a>
+</div>
+</footer>
+</body></html>

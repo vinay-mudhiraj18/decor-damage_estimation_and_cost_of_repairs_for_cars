@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DECOR AI - Inspection History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=DM+Sans:wght@400&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#003548",
+                    "tertiary-fixed-dim": "#00e475",
+                    "primary": "#ffb693",
+                    "tertiary": "#00e475",
+                    "surface-bright": "#3a3939",
+                    "surface-container-low": "#1c1b1b",
+                    "on-tertiary-fixed-variant": "#005226",
+                    "on-primary-fixed": "#351000",
+                    "background": "#131313",
+                    "on-primary": "#561f00",
+                    "primary-fixed": "#ffdbcc",
+                    "primary-fixed-dim": "#ffb693",
+                    "on-surface": "#e5e2e1",
+                    "outline": "#a98a7d",
+                    "surface-tint": "#ffb693",
+                    "on-error": "#690005",
+                    "surface-variant": "#353534",
+                    "on-primary-fixed-variant": "#7a3000",
+                    "on-background": "#e5e2e1",
+                    "surface": "#131313",
+                    "surface-container-high": "#2a2a2a",
+                    "error-container": "#93000a",
+                    "secondary-container": "#00c1fd",
+                    "secondary": "#8fd8ff",
+                    "surface-container-lowest": "#0e0e0e",
+                    "inverse-on-surface": "#313030",
+                    "error": "#ffb4ab",
+                    "on-tertiary": "#003918",
+                    "inverse-surface": "#e5e2e1",
+                    "on-primary-container": "#572000",
+                    "on-secondary-fixed-variant": "#004d67",
+                    "on-tertiary-fixed": "#00210b",
+                    "on-secondary-container": "#004b65",
+                    "primary-container": "#ff6b00",
+                    "surface-container": "#201f1f",
+                    "on-surface-variant": "#e2bfb0",
+                    "tertiary-fixed": "#62ff96",
+                    "tertiary-container": "#00b059",
+                    "outline-variant": "#5a4136",
+                    "on-tertiary-container": "#003a19",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-highest": "#353534",
+                    "secondary-fixed-dim": "#75d1ff",
+                    "on-secondary-fixed": "#001e2b",
+                    "inverse-primary": "#a04100",
+                    "surface-dim": "#131313",
+                    "secondary-fixed": "#c2e8ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-padding": "24px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px",
+                    "unit": "8px",
+                    "gutter": "16px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "h1": ["Barlow Condensed"],
+                    "body-sm": ["DM Sans"],
+                    "body-md": ["DM Sans"],
+                    "h1-mobile": ["Barlow Condensed"],
+                    "body-lg": ["DM Sans"],
+                    "h3": ["Barlow Condensed"],
+                    "data-md": ["JetBrains Mono"],
+                    "data-lg": ["JetBrains Mono"],
+                    "h2": ["Barlow Condensed"],
+                    "data-sm": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "h1": ["48px", { "lineHeight": "1.1", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                    "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                    "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                    "h1-mobile": ["36px", { "lineHeight": "1.1", "fontWeight": "700" }],
+                    "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                    "h3": ["24px", { "lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600" }],
+                    "data-md": ["14px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                    "data-lg": ["18px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                    "h2": ["32px", { "lineHeight": "1.2", "letterSpacing": "0.04em", "fontWeight": "700" }],
+                    "data-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "400" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .amber-glow:hover { box-shadow: 0px 0px 15px rgba(255, 107, 0, 0.4); }
+        .tech-card { transition: all 0.3s ease; border-left: 1px solid var(--border-color, #a98a7d); }
+        .tech-card:hover { border-left: 3px solid #ffb693; }
+        .glass-badge { background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .scan-beam-effect { position: relative; overflow: hidden; }
+        .scan-beam-effect::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to bottom, #ffb693, transparent); transform: translateY(-100%); transition: transform 0.5s ease; }
+        .scan-beam-effect:hover::after { transform: translateY(1000%); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col pt-[60px] pb-[80px] md:pb-0 font-body-md">
+<!-- TopAppBar -->
+<header class="bg-surface/80 dark:bg-surface/80 backdrop-blur-xl fixed top-0 w-full z-50 h-[60px] shadow-[0px_0px_15px_rgba(255,107,0,0.2)] border-b border-white/10 flex justify-between items-center px-container-padding max-w-full mx-auto">
+<div class="flex items-center gap-gutter cursor-none active:scale-95 hover:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="directions_car">directions_car</span>
+<span class="font-h2 text-h2 font-bold text-primary dark:text-primary-fixed-dim tracking-wider">DECOR</span>
+</div>
+<!-- Desktop Nav -->
+<nav class="hidden md:flex gap-container-padding">
+<a class="font-data-md text-data-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-none active:scale-95 uppercase" href="#">Home</a>
+<a class="font-data-md text-data-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-none active:scale-95 uppercase" href="#">Upload</a>
+<a class="font-data-md text-data-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-none active:scale-95 uppercase" href="#">Report</a>
+<a class="font-data-md text-data-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-none active:scale-95 uppercase" href="#">Garages</a>
+<a class="font-data-md text-data-md text-primary dark:text-primary border-b-2 border-primary pb-1 hover:text-primary transition-colors duration-300 cursor-none active:scale-95 uppercase" href="#">History</a>
+</nav>
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden border border-outline-variant cursor-none active:scale-95 hover:text-primary transition-colors duration-300">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A close-up profile portrait of a confident tech professional. The lighting is moody and cinematic, illuminating the subject against a dark, tech-noir background. The overall style aligns with a sleek, modern automotive AI diagnostic interface, featuring deep blacks and subtle amber glow reflections. The image is high resolution and photorealistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5bXZ9mWC8ZPzZTDnPl2bx2NyRD-wTxAbhYV4AgECWzv6AcY6mkOrhy1qWZk8IHJzDyOf7pYgmp_YKjBthvpj4wTiGd9cS4hnVrG1fty1gbbscHGVKNLfkvRS8w61q0J1UOFxhv3fLXsF5W6Vbe4NFfhmkeYs2e9oZzeQUjzX-TmQsgnFdPeu9A_BUS_Um2epsiHyDdYoq63L-iNcZy9omiQsUYJimMdMrFBWUh8o6CpiBBX4OVr9o4HcazLBEZXFsZj9lvQZk6cY"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow px-container-padding py-stack-lg max-w-7xl mx-auto w-full">
+<!-- Header -->
+<div class="mb-stack-lg">
+<h1 class="font-h1 text-h1 text-on-background mb-unit hidden md:block">INSPECTION HISTORY</h1>
+<h1 class="font-h1-mobile text-h1-mobile text-on-background mb-unit md:hidden">INSPECTION HISTORY</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Review past AI diagnostic reports and cost estimations.</p>
+</div>
+<!-- Toast Notification (Absolute positioned for demonstration) -->
+<div class="fixed top-[80px] right-container-padding bg-tertiary-container text-on-tertiary-container px-gutter py-unit rounded-lg flex items-center gap-unit shadow-[0px_0px_15px_rgba(0,228,117,0.3)] z-40 border border-tertiary-fixed-dim backdrop-blur-md opacity-90">
+<span class="material-symbols-outlined font-data-md text-data-md" data-icon="check_circle">check_circle</span>
+<span class="font-data-md text-data-md uppercase">Saved to history ✓</span>
+</div>
+<!-- Stats Section -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-gutter mb-stack-lg">
+<div class="bg-surface-container-high border border-outline-variant p-gutter rounded-lg tech-card flex flex-col justify-center">
+<span class="font-data-sm text-data-sm text-on-surface-variant uppercase mb-unit">Total Inspections</span>
+<span class="font-h2 text-h2 text-primary">142</span>
+</div>
+<div class="bg-surface-container-high border border-outline-variant p-gutter rounded-lg tech-card flex flex-col justify-center">
+<span class="font-data-sm text-data-sm text-on-surface-variant uppercase mb-unit">Avg. Est. Cost</span>
+<span class="font-h2 text-h2 text-on-background">$1.2k</span>
+</div>
+<div class="bg-surface-container-high border border-outline-variant p-gutter rounded-lg tech-card flex flex-col justify-center hidden md:flex">
+<span class="font-data-sm text-data-sm text-on-surface-variant uppercase mb-unit">Critical Damage</span>
+<span class="font-h2 text-h2 text-error">24</span>
+</div>
+<div class="bg-surface-container-high border border-outline-variant p-gutter rounded-lg tech-card flex flex-col justify-center hidden md:flex">
+<span class="font-data-sm text-data-sm text-on-surface-variant uppercase mb-unit">Last Active</span>
+<span class="font-h3 text-h3 text-secondary">Today</span>
+</div>
+</section>
+<!-- History List -->
+<section class="flex flex-col gap-stack-md">
+<!-- List Item 1 -->
+<article class="bg-surface-container border border-outline-variant rounded-lg p-gutter flex flex-col md:flex-row gap-gutter tech-card items-start md:items-center scan-beam-effect">
+<div class="w-full md:w-32 h-24 bg-surface-bright rounded bg-cover bg-center border border-outline/50 flex-shrink-0 relative overflow-hidden" data-alt="A cinematic, high-contrast photograph of a damaged white Hyundai Creta. The vehicle is parked in a dark, industrial garage setting illuminated by stark, artificial white light. Subtle amber reflections highlight the dents on the front bumper, emphasizing a high-tech diagnostic visual style consistent with an AI-driven auto repair interface." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDisM9zaPWRsAxKC2_1gRNuBIDEEghfyB9-_oJmvv0N9xl11AgEXxPlmKTq3FFAZnzUGTprHtmgf-Hu__cn6nGO9QZmqLj5IPWxkC-ndEZYKQvToi1lDUlGSmBIBRw1x7mkGtGZdJCQjAQU8wBJuV1MZrss-gncKQlthjKjevdbs80akUFy-INh1IJMW5vyHETMToCJiBjBQ7udHU8PNExWzHfrroLoJlq0BN7UQ8ovhBgCaioJfeFB08v1nwfzaLWm4d5fKOWDdg0');">
+<div class="absolute inset-0 bg-black/20"></div>
+</div>
+<div class="flex-grow flex flex-col gap-unit w-full">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-h3 text-h3 text-on-background">HYUNDAI CRETA</h3>
+<span class="font-data-sm text-data-sm text-on-surface-variant uppercase">ID: INS-29481</span>
+</div>
+<span class="glass-badge font-data-sm text-data-sm text-tertiary-fixed-dim px-2 py-1 rounded border-tertiary/30">COMPLETED</span>
+</div>
+<div class="flex flex-wrap gap-x-gutter gap-y-unit mt-2">
+<div class="flex items-center gap-unit">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]" data-icon="calendar_today">calendar_today</span>
+<span class="font-data-md text-data-md text-on-background">2023-10-24</span>
+</div>
+<div class="flex items-center gap-unit">
+<span class="material-symbols-outlined text-error text-[16px]" data-icon="warning">warning</span>
+<span class="font-data-md text-data-md text-on-background">3 Issues</span>
+</div>
+<div class="flex items-center gap-unit md:ml-auto">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="payments">payments</span>
+<span class="font-data-md text-data-md text-primary">$450 - $600</span>
+</div>
+</div>
+</div>
+<button class="hidden md:flex w-10 h-10 border border-outline rounded flex items-center justify-center hover:bg-white/5 transition-colors flex-shrink-0 text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</article>
+<!-- List Item 2 -->
+<article class="bg-surface-container border border-outline-variant rounded-lg p-gutter flex flex-col md:flex-row gap-gutter tech-card items-start md:items-center scan-beam-effect">
+<div class="w-full md:w-32 h-24 bg-surface-bright rounded bg-cover bg-center border border-outline/50 flex-shrink-0 relative overflow-hidden" data-alt="A sleek, dark gray BMW sedan photographed from a low angle in a futuristic laboratory setting. The car shows minor side scratches illuminated by sharp, ice-blue neon strips. The background is mostly pitch black, creating an intense, tech-noir aesthetic typical of advanced automotive analysis software." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBFKuptqQthLYltb67kS1BGFD5aK9BA_pRO-c-bLM5QoBN8-59pAyzN20Ey3C9PeyqZJkzU1_JTGNCjOe6A2jtHerUj6SdmtJ_7bZboRbflZRMrx617Nudmd084r8TV0zYwOAFZ66JVm6tFxdiKEKAG8btBa0nIcrPwlCRrw1_PERmtsnkt5pYkJJd9JBKy6ckxj2tW3GATgbzEqEsk7FV4582Y3hQrSPnTUYsYgDSkfQDYlyGZhm5-xBrv72C05W2hW6CN_AZXG3U');">
+<div class="absolute inset-0 bg-black/20"></div>
+</div>
+<div class="flex-grow flex flex-col gap-unit w-full">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-h3 text-h3 text-on-background">BMW 3 SERIES</h3>
+<span class="font-data-sm text-data-sm text-on-surface-variant uppercase">ID: INS-29480</span>
+</div>
+<span class="glass-badge font-data-sm text-data-sm text-error px-2 py-1 rounded border-error/30">PENDING</span>
+</div>
+<div class="flex flex-wrap gap-x-gutter gap-y-unit mt-2">
+<div class="flex items-center gap-unit">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]" data-icon="calendar_today">calendar_today</span>
+<span class="font-data-md text-data-md text-on-background">2023-10-22</span>
+</div>
+<div class="flex items-center gap-unit">
+<span class="material-symbols-outlined text-error text-[16px]" data-icon="warning">warning</span>
+<span class="font-data-md text-data-md text-on-background">1 Issue</span>
+</div>
+<div class="flex items-center gap-unit md:ml-auto">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="payments">payments</span>
+<span class="font-data-md text-data-md text-primary">Calculating...</span>
+</div>
+</div>
+</div>
+<button class="hidden md:flex w-10 h-10 border border-outline rounded flex items-center justify-center hover:bg-white/5 transition-colors flex-shrink-0 text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</article>
+<!-- List Item 3 -->
+<article class="bg-surface-container border border-outline-variant rounded-lg p-gutter flex flex-col md:flex-row gap-gutter tech-card items-start md:items-center scan-beam-effect">
+<div class="w-full md:w-32 h-24 bg-surface-bright rounded bg-cover bg-center border border-outline/50 flex-shrink-0 relative overflow-hidden" data-alt="A bright red sports car viewed from the rear, showing damage to the taillight assembly. The lighting is clinical and precise, set against a deep black void background. Optical glow effects in amber highlight the specific point of damage, fitting a precision AI diagnostic user interface design style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCuUgNrM01xmkJmz3U-QH_kKd0RaB-I5OOZ5lX69K4_FVviT1JVY5xCqvPXMNF374svParJJ09qkQDCHlcTDKSlmKftpBiRvclvYpndBNIZDfwxsVGgcVa7Vfp1ksPWxXDYECsrRb_dIrE33ha4dlKC8W3j_yovICZMla9JeWKwCfMoVluklKTcHJGIXqNr6d96AAXGh3ju5jjex3xZUwULzvC64H0RT0CXrlbLZWo3ykxQJZdCD9_hiZiuTg9fKhqPI4gzIsfhlCk');">
+<div class="absolute inset-0 bg-black/20"></div>
+</div>
+<div class="flex-grow flex flex-col gap-unit w-full">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-h3 text-h3 text-on-background">CHEVROLET CAMARO</h3>
+<span class="font-data-sm text-data-sm text-on-surface-variant uppercase">ID: INS-29479</span>
+</div>
+<span class="glass-badge font-data-sm text-data-sm text-tertiary-fixed-dim px-2 py-1 rounded border-tertiary/30">COMPLETED</span>
+</div>
+<div class="flex flex-wrap gap-x-gutter gap-y-unit mt-2">
+<div class="flex items-center gap-unit">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]" data-icon="calendar_today">calendar_today</span>
+<span class="font-data-md text-data-md text-on-background">2023-10-20</span>
+</div>
+<div class="flex items-center gap-unit">
+<span class="material-symbols-outlined text-error text-[16px]" data-icon="warning">warning</span>
+<span class="font-data-md text-data-md text-on-background">5 Issues</span>
+</div>
+<div class="flex items-center gap-unit md:ml-auto">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="payments">payments</span>
+<span class="font-data-md text-data-md text-primary">$1200 - $1500</span>
+</div>
+</div>
+</div>
+<button class="hidden md:flex w-10 h-10 border border-outline rounded flex items-center justify-center hover:bg-white/5 transition-colors flex-shrink-0 text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</article>
+</section>
+<!-- Empty State Example (Hidden by default, shown here for structure reference) -->
+<section class="hidden flex flex-col items-center justify-center py-stack-lg min-h-[300px] border border-dashed border-outline-variant rounded-lg mt-stack-lg bg-surface-container-lowest/50">
+<span class="material-symbols-outlined text-6xl text-outline-variant mb-gutter opacity-50" data-icon="directions_car">directions_car</span>
+<h3 class="font-h3 text-h3 text-on-surface-variant uppercase mb-unit">NO INSPECTIONS YET</h3>
+<p class="font-body-md text-body-md text-on-surface-variant opacity-70 mb-gutter">Upload an image to start analyzing damage.</p>
+<button class="bg-primary text-black font-data-md text-data-md uppercase px-gutter py-unit rounded amber-glow transition-all">New Inspection</button>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest w-full py-stack-lg border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center px-container-padding gap-stack-md hidden md:flex">
+<span class="font-h3 text-h3 text-primary">DECOR</span>
+<div class="flex gap-gutter">
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-primary-fixed transition-colors cursor-none opacity-80 hover:opacity-100 uppercase" href="#">Privacy Policy</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-primary-fixed transition-colors cursor-none opacity-80 hover:opacity-100 uppercase" href="#">Terms of Service</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-primary-fixed transition-colors cursor-none opacity-80 hover:opacity-100 uppercase" href="#">Legal</a>
+</div>
+<span class="font-data-sm text-data-sm text-on-surface-variant uppercase">© 2024 DECOR AI. ALL RIGHTS RESERVED.</span>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container-highest/90 dark:bg-surface-container-highest/90 backdrop-blur-md fixed bottom-0 w-full z-50 rounded-t-xl border-t border-outline-variant shadow-[0_-5px_15px_rgba(0,0,0,0.5)] flex justify-around items-center py-stack-sm px-gutter">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 hover:bg-white/5 transition-all cursor-none active:scan-beam-effect active:scale-105" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-data-sm text-data-sm uppercase mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 hover:bg-white/5 transition-all cursor-none active:scan-beam-effect active:scale-105" href="#">
+<span class="material-symbols-outlined" data-icon="cloud_upload">cloud_upload</span>
+<span class="font-data-sm text-data-sm uppercase mt-1">Upload</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 hover:bg-white/5 transition-all cursor-none active:scan-beam-effect active:scale-105" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-data-sm text-data-sm uppercase mt-1">Report</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 hover:bg-white/5 transition-all cursor-none active:scan-beam-effect active:scale-105" href="#">
+<span class="material-symbols-outlined" data-icon="garage">garage</span>
+<span class="font-data-sm text-data-sm uppercase mt-1">Garages</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary/10 rounded-xl p-2 shadow-[0_0_10px_rgba(255,182,147,0.3)] cursor-none active:scan-beam-effect active:scale-105" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-data-sm text-data-sm uppercase mt-1">History</span>
+</a>
+</nav>
+</body></html>
