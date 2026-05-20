@@ -1,50 +1,85 @@
-# 🚗 DECOR — Damage Estimation and Cost of Repairs
+<div align="center">
+  <h1>🚗 DECOR</h1>
+  <h3>Damage Estimation and Cost of Repairs for Cars</h3>
 
-[![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
-[![Django](https://img.shields.io/badge/Django-5.0%2B-092E20?logo=django&logoColor=white)](https://www.djangoproject.com/)
-[![YOLOv11](https://img.shields.io/badge/YOLO-v11%20%2F%20v8-FF6F00?logo=ultralytics&logoColor=white)](https://docs.ultralytics.com/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4%2B-38BDF8?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+  [![Live Demo](https://img.shields.io/badge/Live_Demo-Online-success?style=for-the-badge&logo=render)](https://decor-g3o4.onrender.com/)
+  <br/>
 
-**DECOR** is an advanced, AI-powered diagnostic and estimation system designed to evaluate automotive collision damage. By combining high-performance computer vision with localized repair pricing models, DECOR detects exterior vehicle damage, identifies affected parts, and generates detailed cost breakdowns in seconds.
+  [![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+  [![Django](https://img.shields.io/badge/Django-5.0%2B-092E20?logo=django&logoColor=white)](https://www.djangoproject.com/)
+  [![YOLOv8n](https://img.shields.io/badge/Model-YOLOv8n-FF6F00?logo=ultralytics&logoColor=white)](https://docs.ultralytics.com/)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4%2B-38BDF8?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+  [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
----
-
-## ✨ Features
-
-- **🔍 AI-Powered Detection**: Leverages **YOLOv11/v8** models to automatically scan and identify damage on 7 major vehicle zones: *Bonnet, Bumper, Dickey, Door, Fender, Light, and Windshield*.
-- **💰 Smart Repair Costing**: Integrates with a localized SQL database containing model-specific parts pricing across 10 major automotive brands (including Suzuki, Honda, Toyota, Hyundai, BMW, Skoda, etc.).
-- **🗺️ Geolocation-Aware Garage Locator**: Helps users find nearby repair facilities using a resilient **three-tier mapping architecture** (Google Places API ➔ OpenStreetMap Overpass Fallback ➔ Local Demo Fallback).
-- **🎨 Premium HUD Styling**: A modern, dark-mode cockpit interface utilizing a sleek glassmorphic theme, responsive dashboard inputs, dynamic dropdown mapping, and interactive original/annotated image tab toggling.
-- **🛡️ Secure Operations**: Decouples sensitive environment variables and credentials from source code tracking using strict gitignore parameters.
+  **[Experience the Live Application Here](https://decor-g3o4.onrender.com/)**
+</div>
 
 ---
 
-## 🛠️ Tech Stack
+## 🌟 About DECOR
 
-- **Backend**: Python, Django
-- **Database**: SQLite (local) / MySQL Support
-- **Machine Learning & Image Manipulation**: Ultralytics (YOLO), PyTorch, OpenCV, Pillow
-- **Frontend**: Tailwind CSS, Material Symbols Outlined, Google Fonts (Barlow Condensed, DM Sans, JetBrains Mono)
-- **APIs**: Google Maps JavaScript API & Google Places Library, OpenStreetMap Overpass API
+**DECOR** is a next-generation, AI-driven diagnostic and estimation platform built to evaluate automotive collision damage instantly. By combining highly optimized computer vision with localized repair pricing models, DECOR accurately detects exterior vehicle damage, identifies the exact affected panels, and generates comprehensive, itemized repair cost breakdowns in seconds.
 
 ---
 
-## ⚙️ Architecture
+## ✨ Premium Features
+
+- **🔍 Precision AI Detection**: Powered by a custom-trained **YOLOv8n** (Nano) model optimized for speed and accuracy. Automatically scans and draws bounding boxes around damage across 7 major vehicle zones.
+- **💰 Dynamic Repair Costing**: Generates real-time, localized cost estimates using a robust database containing proprietary parts pricing across 10 major automotive brands (including Honda, Toyota, BMW, Hyundai, Skoda, and more).
+- **🗺️ Geolocation-Aware Garage Finder**: Instantly connects users with nearby repair facilities. Utilizes a resilient three-tier mapping architecture (Google Places API ➔ OpenStreetMap Overpass Fallback ➔ Local Demo Fallback).
+- **🎨 Glassmorphic Cockpit UI**: A state-of-the-art, dark-mode HUD interface built with Tailwind CSS. Features interactive image toggling, dynamic dropdowns, and highly responsive components.
+- **☁️ Cloud-Ready Architecture**: Configured for seamless cloud deployment with PostgreSQL (via Supabase), Gunicorn, and WhiteNoise for production-grade static file serving.
+
+---
+
+## 🛠️ Technology Stack
+
+| Category | Technologies Used |
+| :--- | :--- |
+| **Backend Framework** | Django, Python |
+| **Database** | PostgreSQL (Production via Supabase), SQLite (Local Dev) |
+| **Machine Learning** | Ultralytics YOLOv8n, PyTorch (CPU-optimized), OpenCV, Pillow |
+| **Frontend Styling** | Tailwind CSS, Google Fonts (Barlow Condensed, DM Sans) |
+| **External APIs** | Google Maps JavaScript API, OpenStreetMap Overpass API |
+| **Deployment** | Render, Gunicorn, WhiteNoise |
+
+---
+
+## 🧠 AI Model & Specifications
+
+DECOR relies on a lightweight, high-speed **YOLOv8n** model, making it fast enough for real-time web inference while retaining excellent bounding box accuracy. The model detects structural and surface damage across the following classifications:
+
+| Class Index | Class Name | Target Vehicle Part |
+|:---:|:---|:---|
+| **0** | **Bonnet** | Engine Hood / Front Upper Panel |
+| **1** | **Bumper** | Front and Rear Bumpers |
+| **2** | **Dickey** | Trunk / Boot Panel |
+| **3** | **Door** | Side Passenger/Driver Doors |
+| **4** | **Fender** | Wheel Arch Panels |
+| **5** | **Light** | Headlamps and Tail-lights |
+| **6** | **Windshield** | Front and Rear Glass Panels |
+
+> *Model weights are saved locally under `/models/model weights/best.pt`.*
+
+---
+
+## ⚙️ System Workflow
 
 ```mermaid
 graph TD
     A[User Client] -->|Upload Images & Brand/Model| B[Django Server]
-    B -->|Query / Save Reports| C[(SQLite Database)]
-    B -->|Send Temp Image| D[YOLO Object Detection Model]
+    B -->|Save to PostgreSQL| C[(Supabase DB)]
+    B -->|Send Image Matrix| D[YOLOv8n AI Model]
     D -->|Return Box Coordinates & Classes| B
-    B -->|Calculate Cost & Generate Annotations| E[Results View]
-    E -->|Display Reports & Garages| A
+    B -->|Calculate Cost via Pricing Logic| E[Results View]
+    E -->|Display Itemized Report & Garages| A
 ```
 
 ---
 
-## 🚀 Setup & Installation
+## 🚀 Local Setup & Installation
+
+Want to run DECOR locally? Follow these steps:
 
 ### 1. Clone the Repository
 ```bash
@@ -54,13 +89,10 @@ cd decor-damage_estimation_and_cost_of_repairs_for_cars
 
 ### 2. Configure Your Virtual Environment
 ```bash
-# Create environment
 python -m venv venv
-
-# Activate environment (Windows)
+# Windows:
 .\venv\Scripts\activate
-
-# Activate environment (Mac/Linux)
+# Mac/Linux:
 source venv/bin/activate
 ```
 
@@ -70,65 +102,36 @@ pip install -r requirements.txt
 ```
 
 ### 4. Setup Environment Variables
-Create a local `.env` file in the root directory by copying the template file:
 ```bash
 cp .env.example .env
 ```
-Open `.env` and fill in your variables:
-```env
-SECRET_KEY=your_django_secret_key
-DEBUG=True
-GOOGLE_MAPS_API_KEY=your_google_maps_api_key
-```
+*Open `.env` and configure your `SECRET_KEY`, `DATABASE_URL` (if using Postgres), and `GOOGLE_MAPS_API_KEY`.*
 
-### 5. Apply Database Migrations
+### 5. Apply Database Migrations & Run
 ```bash
 python manage.py migrate
-```
-
-### 6. Launch the Development Server
-```bash
 python manage.py runserver
 ```
-Visit `http://127.0.0.1:8000/` in your browser.
-
----
-
-## 🧠 Model Specifications
-
-The object detection pipeline classifies damages across 7 distinct parts:
-| Class Index | Class Name | Target Part |
-|:---:|---|---|
-| **0** | Bonnet | Engine Hood / Front Panel |
-| **1** | Bumper | Front and Rear Bumpers |
-| **2** | Dickey | Trunk / Boot Panel |
-| **3** | Door | Side Passenger/Driver Doors |
-| **4** | Fender | Wheel Arch Panels |
-| **5** | Light | Headlamps and Tail-lights |
-| **6** | Windshield | Front and Rear Glass Panels |
-
-Model weights are saved locally under `/models/model weights/best.pt`.
-
----
-
-## 🏷️ Keywords & Hashtags
-
-### Keywords
-`car damage detection`, `repair for cars`, `car repair cost estimation`, `vehicle collision diagnostics`, `YOLO car damage detector`, `auto body repair estimator`, `auto dent repair`, `mechanical shop finder`, `car repair estimate`
-
-### Hashtags
-`#CarDamageDetection` `#RepairForCars` `#AutoBodyRepair` `#CarRepairEstimate` `#YOLO` `#Django` `#ComputerVision` `#VehicleDiagnostics` `#CarMaintenance`
+Visit `http://127.0.0.1:8000/` in your browser!
 
 ---
 
 ## 📬 Contact & Support
 
-For queries, collaborations, or suggestions, please get in touch:
+For queries, collaborations, or suggestions regarding DECOR, please get in touch:
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vinay-beesaboina-512401276/)
 [![Email](https://img.shields.io/badge/Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:beesaboinavinay@gmail.com)
 
 Developed with 🧡 by **Vinay Beesaboina**.
+
+---
+
+## 🏷️ Keywords & Hashtags
+
+**Keywords**: `car damage detection`, `repair for cars`, `car repair cost estimation`, `vehicle collision diagnostics`, `YOLOv8 car damage detector`, `auto body repair estimator`, `auto dent repair`, `mechanical shop finder`
+
+**Hashtags**: `#CarDamageDetection` `#RepairForCars` `#AutoBodyRepair` `#CarRepairEstimate` `#YOLOv8` `#Django` `#ComputerVision` `#VehicleDiagnostics`
 
 ---
 
