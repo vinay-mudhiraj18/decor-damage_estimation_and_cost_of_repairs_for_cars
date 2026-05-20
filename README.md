@@ -121,6 +121,17 @@ Model weights are saved locally under `/models/model weights/best.pt`.
 
 ---
 
+## 📬 Contact & Support
+
+For queries, collaborations, or suggestions, please get in touch:
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vinay-beesaboina-512401276/)
+[![Email](https://img.shields.io/badge/Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:beesaboinavinay@gmail.com)
+
+Developed with 🧡 by **Vinay Beesaboina**.
+
+---
+
 ## 🛡️ License
 
 Distributed under the MIT License. See `LICENSE` for more information.
