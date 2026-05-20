@@ -73,3 +73,6 @@ LOGIN_REDIRECT_URL = '/'
 
 # YOLO model path
 YOLO_MODEL_PATH = str(BASE_DIR / 'models' / 'model weights' / 'best.pt')
+
+# Google Maps API settings
+GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY', '')

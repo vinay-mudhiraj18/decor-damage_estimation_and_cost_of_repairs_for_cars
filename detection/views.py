@@ -287,4 +287,6 @@ def report_detail(request, pk):
 
 @login_required
 def nearby_garages(request):
-    return render(request, 'nearby_garages.html')
+    return render(request, 'nearby_garages.html', {
+        'google_maps_api_key': getattr(settings, 'GOOGLE_MAPS_API_KEY', '')
+    })
