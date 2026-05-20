@@ -10,3 +10,6 @@ __pycache__/
 # IDEs
 .vscode/
 .idea/
+
+# Optional deployment files
+render.yaml
