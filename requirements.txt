@@ -10,3 +10,5 @@ psycopg2-binary
 dj-database-url
 gunicorn
 whitenoise
+boto3
+django-storages[s3]

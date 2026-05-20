@@ -67,9 +67,28 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Storage Configuration
+STORAGES = {
+    'default': {
+        'BACKEND': 'storages.backends.s3.S3Storage' if os.getenv('AWS_ACCESS_KEY_ID') else 'django.core.files.storage.FileSystemStorage',
+        'OPTIONS': {
+            'access_key': os.getenv('AWS_ACCESS_KEY_ID'),
+            'secret_key': os.getenv('AWS_SECRET_ACCESS_KEY'),
+            'bucket_name': os.getenv('AWS_STORAGE_BUCKET_NAME'),
+            'endpoint_url': os.getenv('AWS_S3_ENDPOINT_URL'),
+            'region_name': os.getenv('AWS_S3_REGION_NAME'),
+            'default_acl': 'public-read',
+            'querystring_auth': False,
+        },
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
