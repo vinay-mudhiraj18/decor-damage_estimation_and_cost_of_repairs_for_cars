@@ -72,6 +72,16 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Storage Configuration
+endpoint_url = os.getenv('AWS_S3_ENDPOINT_URL', '')
+custom_domain = None
+if endpoint_url and 'storage.supabase.co' in endpoint_url:
+    try:
+        project_ref = endpoint_url.split('//')[1].split('.')[0]
+        bucket_name = os.getenv('AWS_STORAGE_BUCKET_NAME', 'decor-media')
+        custom_domain = f"{project_ref}.supabase.co/storage/v1/object/public/{bucket_name}"
+    except Exception:
+        pass
+
 STORAGES = {
     'default': {
         'BACKEND': 'storages.backends.s3.S3Storage' if os.getenv('AWS_ACCESS_KEY_ID') else 'django.core.files.storage.FileSystemStorage',
@@ -81,7 +91,7 @@ STORAGES = {
             'bucket_name': os.getenv('AWS_STORAGE_BUCKET_NAME'),
             'endpoint_url': os.getenv('AWS_S3_ENDPOINT_URL'),
             'region_name': os.getenv('AWS_S3_REGION_NAME'),
-            'default_acl': 'public-read',
+            'custom_domain': custom_domain,
             'querystring_auth': False,
         },
     },
