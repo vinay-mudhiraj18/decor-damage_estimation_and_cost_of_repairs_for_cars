@@ -111,6 +111,16 @@ Model weights are saved locally under `/models/model weights/best.pt`.
 
 ---
 
+## 🏷️ Keywords & Hashtags
+
+### Keywords
+`car damage detection`, `repair for cars`, `car repair cost estimation`, `vehicle collision diagnostics`, `YOLO car damage detector`, `auto body repair estimator`, `auto dent repair`, `mechanical shop finder`, `car repair estimate`
+
+### Hashtags
+`#CarDamageDetection` `#RepairForCars` `#AutoBodyRepair` `#CarRepairEstimate` `#YOLO` `#Django` `#ComputerVision` `#VehicleDiagnostics` `#CarMaintenance`
+
+---
+
 ## 🛡️ License
 
 Distributed under the MIT License. See `LICENSE` for more information.
