@@ -114,8 +114,11 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    brands = list(CarModel.objects.values_list('brand', flat=True).distinct())
+    # Fetch distinct brand and model combinations in a single query
     brand_models_qs = list(CarModel.objects.values('brand', 'model').distinct())
+    
+    # Deriving distinct brands list in memory to avoid a second database query
+    brands = sorted(list(set(item['brand'] for item in brand_models_qs)))
     brand_models = json.dumps(brand_models_qs)
 
     if request.method == 'POST':
@@ -208,15 +211,15 @@ def dashboard(request):
                 'damage_detected': False,
             })
 
-        # Build final part_details with prices
+        # Build final part_details with prices in a single query (batch fetch instead of loop)
         part_details = {}
-        for part, info in merged.items():
-            row = CarModel.objects.filter(brand=car_brand, model=car_model_val, part=part).first()
-            if row:
-                part_details[part] = {
-                    'confidence': info['confidence'],
-                    'price':      float(row.price),
-                }
+        rows = CarModel.objects.filter(brand=car_brand, model=car_model_val, part__in=merged.keys())
+        for row in rows:
+            info = merged[row.part]
+            part_details[row.part] = {
+                'confidence': info['confidence'],
+                'price':      float(row.price),
+            }
 
         total_cost = round(sum(d['price'] for d in part_details.values()), 2)
 
@@ -266,10 +269,15 @@ def dashboard(request):
 
 @login_required
 def report_history(request):
-    reports = DetectionReport.objects.filter(user=request.user).order_by('-created_at')
-    total = reports.count()
-    avg_cost = round(sum(float(r.total_cost) for r in reports) / total, 0) if total else 0
-    with_damage = reports.filter(total_cost__gt=0).count()
+    # Convert query set to a list once to load all reports in a single query
+    reports = list(DetectionReport.objects.filter(user=request.user).order_by('-created_at'))
+    total = len(reports)
+    
+    # Calculate statistics in memory (0 extra database queries)
+    total_cost_sum = sum(float(r.total_cost) for r in reports)
+    avg_cost = round(total_cost_sum / total, 0) if total else 0
+    with_damage = sum(1 for r in reports if r.total_cost > 0)
+    
     return render(request, 'report_history.html', {
         'reports': reports,
         'total_inspections': total,

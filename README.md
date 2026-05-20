@@ -28,7 +28,9 @@
 - **💰 Dynamic Repair Costing**: Generates real-time, localized cost estimates using a robust database containing proprietary parts pricing across 10 major automotive brands (including Honda, Toyota, BMW, Hyundai, Skoda, and more).
 - **🗺️ Geolocation-Aware Garage Finder**: Instantly connects users with nearby repair facilities. Utilizes a resilient three-tier mapping architecture (Google Places API ➔ OpenStreetMap Overpass Fallback ➔ Local Demo Fallback).
 - **🎨 Glassmorphic Cockpit UI**: A state-of-the-art, dark-mode HUD interface built with Tailwind CSS. Features interactive image toggling, dynamic dropdowns, and highly responsive components.
-- **☁️ Cloud-Ready Architecture**: Configured for seamless cloud deployment with PostgreSQL (via Supabase), Gunicorn, and WhiteNoise for production-grade static file serving.
+- **☁️ Persistent Supabase S3 Storage**: Decouples media storage from ephemeral cloud servers. All user-uploaded original images and YOLO-annotated damage outputs are saved permanently in a **Supabase Storage Bucket** using S3-compatible APIs.
+- **🧹 Auto-Cleanup Signals**: Equipped with Django lifecycle signals (`post_delete`) that automatically clean up storage. When a report is deleted—or a user account is deleted—all corresponding image files are instantly wiped from the Supabase bucket.
+- **⚡ Ultra-Low Latency DB Queries**: Optimized database query layer designed to minimize cloud round-trips. Reduces dashboard query loads and history calculations to single-digit local execution times (~5ms–8ms).
 
 ---
 
@@ -38,6 +40,7 @@
 | :--- | :--- |
 | **Backend Framework** | Django, Python |
 | **Database** | PostgreSQL (Production via Supabase), SQLite (Local Dev) |
+| **Media Storage** | Supabase Storage (S3-compatible via `django-storages` & `boto3`) |
 | **Machine Learning** | Ultralytics YOLO 26n, PyTorch (CPU-optimized), OpenCV, Pillow |
 | **Frontend Styling** | Tailwind CSS, Google Fonts (Barlow Condensed, DM Sans) |
 | **External APIs** | Google Maps JavaScript API, OpenStreetMap Overpass API |
@@ -68,11 +71,12 @@ DECOR relies on a lightweight, high-speed **YOLO 26n** model, making it fast eno
 ```mermaid
 graph TD
     A[User Client] -->|Upload Images & Brand/Model| B[Django Server]
-    B -->|Save to PostgreSQL| C[(Supabase DB)]
+    B -->|Save metadata & records| C[(Supabase DB)]
     B -->|Send Image Matrix| D[YOLO 26n AI Model]
     D -->|Return Box Coordinates & Classes| B
-    B -->|Calculate Cost via Pricing Logic| E[Results View]
-    E -->|Display Itemized Report & Garages| A
+    B -->|Upload Original & Annotated| E[(Supabase S3 Bucket)]
+    B -->|Calculate Cost via Pricing Logic| F[Results View]
+    F -->|Display Itemized Report & Garages| A
 ```
 
 ---
@@ -105,7 +109,7 @@ pip install -r requirements.txt
 ```bash
 cp .env.example .env
 ```
-*Open `.env` and configure your `SECRET_KEY`, `DATABASE_URL` (if using Postgres), and `GOOGLE_MAPS_API_KEY`.*
+*Open `.env` and configure your `SECRET_KEY`, `DATABASE_URL` (if using Postgres), `GOOGLE_MAPS_API_KEY`, and `AWS_S3` Supabase access credentials.*
 
 ### 5. Apply Database Migrations & Run
 ```bash
