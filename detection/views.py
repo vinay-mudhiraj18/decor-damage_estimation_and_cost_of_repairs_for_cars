@@ -2,6 +2,8 @@ import os
 import uuid
 import json
 from io import BytesIO
+from PIL import Image
+import cv2
 from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.shortcuts import render, redirect
@@ -135,9 +137,6 @@ def dashboard(request):
                 messages.error(request, f'Invalid file: {f.name}')
                 return render(request, 'dashboard.html', {'brands': brands, 'brand_models': brand_models})
 
-        process_dir = settings.MEDIA_ROOT
-        os.makedirs(process_dir, exist_ok=True)
-
         uid = uuid.uuid4().hex[:8]
         merged = {}          # part_name → best detection info
         first_upload_bytes = None
@@ -149,37 +148,42 @@ def dashboard(request):
             # Read uploaded file into memory
             img_bytes = f.read()
 
+            # Load image into memory as a PIL Image
+            try:
+                pil_img = Image.open(BytesIO(img_bytes)).convert("RGB")
+            except Exception:
+                continue
+
+            # Optimize image size (scale down to max 1024px to speed up CPU inference & S3 upload times)
+            max_size = 1024
+            if max(pil_img.size) > max_size:
+                pil_img.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
+                opt_buffer = BytesIO()
+                pil_img.save(opt_buffer, format="JPEG", quality=85)
+                img_bytes = opt_buffer.getvalue()
+
             if idx == 0:
                 first_upload_bytes = img_bytes
                 first_upload_name  = f'original_{uid}.jpg'
 
-            # Save temporarily to disk so YOLO can process it
-            tmp_path = os.path.join(process_dir, f'tmp_{uid}_{idx}.jpg')
-            with open(tmp_path, 'wb') as out:
-                out.write(img_bytes)
-
-            result = model(tmp_path)
+            # Run YOLO directly on the PIL Image in-memory
+            result = model(pil_img)
             boxes  = result[0].boxes
-
-            # Clean up temp file
-            try:
-                os.remove(tmp_path)
-            except OSError:
-                pass
 
             if not boxes or len(boxes) == 0:
                 continue
 
-            # Save annotated image to memory
-            annotated_tmp = os.path.join(process_dir, f'ann_{uid}_{idx}.jpg')
-            result[0].save(annotated_tmp)
-            with open(annotated_tmp, 'rb') as af:
-                last_detected_bytes = af.read()
+            # Plot annotated results in-memory (returns BGR numpy array)
+            annotated_bgr = result[0].plot()
+            annotated_rgb = cv2.cvtColor(annotated_bgr, cv2.COLOR_BGR2RGB)
+            
+            # Save PIL Image directly to in-memory bytes buffer with optimized quality
+            annotated_pil = Image.fromarray(annotated_rgb)
+            ann_buffer = BytesIO()
+            annotated_pil.save(ann_buffer, format="JPEG", quality=85)
+            
+            last_detected_bytes = ann_buffer.getvalue()
             last_detected_name = f'detected_{uid}_{idx}.jpg'
-            try:
-                os.remove(annotated_tmp)
-            except OSError:
-                pass
 
             for box in boxes:
                 class_id = int(box.cls.item())
