@@ -185,138 +185,6 @@ function addMarker(g,i){
   markers.push({id:g.id,marker:mk});
 }
 
-function fetchPlaces(lat,lng,radiusIndex){
-  var RADII=[5000,10000,20000,50000];
-  if(radiusIndex===undefined)radiusIndex=0;
-  var RADIUS=RADII[radiusIndex];
-  var radiusKm=RADIUS/1000;
-
-  document.getElementById('map-status').textContent='Searching within '+radiusKm+' km (Google Places)...';
-  document.getElementById('radius-label').textContent='RADIUS: '+radiusKm+' KM';
-
-  var service = new google.maps.places.PlacesService(map);
-  service.nearbySearch({
-    location: {lat: lat, lng: lng},
-    radius: RADIUS,
-    type: 'car_repair'
-  }, function(results, status) {
-    console.log('[DECOR] Google Places status:', status, 'results:', results);
-    if (status !== google.maps.places.PlacesServiceStatus.OK && status !== google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-      console.warn('[DECOR] Google Places fetch error (' + status + '). Falling back to OpenStreetMap Overpass API...');
-      document.getElementById('map-status').textContent = 'Google Places (' + status + ') — Switching to OpenStreetMap...';
-      fetchOverpass(lat, lng, radiusIndex);
-      return;
-    }
-
-    var gs = (results || []).map(function(place) {
-      if (!place.geometry || !place.geometry.location) return null;
-      var la = place.geometry.location.lat();
-      var lo = place.geometry.location.lng();
-      var addr = place.vicinity || place.formatted_address || null;
-      return {
-        id: place.place_id,
-        lat: la,
-        lng: lo,
-        name: place.name || null,
-        phone: null,
-        address: addr,
-        type: 'Car Repair',
-        rating: place.rating || null
-      };
-    }).filter(Boolean);
-
-    // Sort by distance from user
-    gs.sort(function(a,b){return distKm(lat,lng,a.lat,a.lng)-distKm(lat,lng,b.lat,b.lng);});
-    console.log('[DECOR] Parsed garages ('+gs.length+') at '+radiusKm+' km:', gs);
-
-    // Fewer than 5 and still have larger radii to try — expand
-    if(gs.length<5 && radiusIndex<RADII.length-1){
-      console.log('[DECOR] Only '+gs.length+' found, expanding to '+(RADII[radiusIndex+1]/1000)+' km...');
-      fetchPlaces(lat,lng,radiusIndex+1);
-      return;
-    }
-
-    document.getElementById('map-loading').style.display='none';
-    var top=gs.slice(0,10);
-    renderCards(top);
-    top.forEach(function(g,i){addMarker(g,i);});
-
-    // Auto-fit map to show all markers
-    if(top.length>0){
-      var bounds=new google.maps.LatLngBounds();
-      bounds.extend({lat:lat,lng:lng});
-      top.forEach(function(g){bounds.extend({lat:g.lat,lng:g.lng});});
-      map.fitBounds(bounds);
-    }
-  function fetchOverpass(lat,lng,radiusIndex){
-  var RADII=[5000,10000,20000,50000,100000,150000,200000];
-  if(radiusIndex===undefined)radiusIndex=0;
-  var RADIUS=RADII[radiusIndex];
-  var radiusKm=RADIUS/1000;
-
-  document.getElementById('map-status').textContent='Searching within '+radiusKm+' km (OpenStreetMap Fallback)...';
-  document.getElementById('radius-label').textContent='RADIUS: '+radiusKm+' KM';
-
-  var q='[out:json][timeout:25];('
-    +'node["amenity"="car_repair"](around:'+RADIUS+','+lat+','+lng+');'
-    +'way["amenity"="car_repair"](around:'+RADIUS+','+lat+','+lng+');'
-    +'relation["amenity"="car_repair"](around:'+RADIUS+','+lat+','+lng+');'
-    +'node["shop"="car_repair"](around:'+RADIUS+','+lat+','+lng+');'
-    +'way["shop"="car_repair"](around:'+RADIUS+','+lat+','+lng+');'
-    +'node["shop"="car"](around:'+RADIUS+','+lat+','+lng+');'
-    +');out center;';
-
-  fetch('https://overpass-api.de/api/interpreter',{
-    method:'POST',
-    headers:{'Content-Type':'application/x-www-form-urlencoded'},
-    body:'data='+encodeURIComponent(q)
-  })
-  .then(function(res){
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    return res.json();
-  })
-  .then(function(data){
-    var els=data.elements||[];
-    var gs=els.map(function(el){
-      var la=el.lat!==undefined?el.lat:(el.center?el.center.lat:null);
-      var lo=el.lon!==undefined?el.lon:(el.center?el.center.lon:null);
-      if(!la||!lo)return null;
-      var t=el.tags||{};
-      var tp=t.amenity||t.shop||'';
-      var tl=tp==='car_repair'?'Car Repair':tp==='vehicle_repair'?'Vehicle Repair':tp==='car'?'Car Shop':tp;
-      var addr=[t['addr:street'],t['addr:housenumber'],t['addr:city']].filter(Boolean).join(', ');
-      return {
-        id:String(el.id),lat:la,lng:lo,
-        name:t.name||t['name:en']||null,
-        phone:t.phone||t['contact:phone']||null,
-        address:addr||null,type:tl,rating:null
-      };
-    }).filter(Boolean);
-
-    gs.sort(function(a,b){return distKm(lat,lng,a.lat,a.lng)-distKm(lat,lng,b.lat,b.lng);});
-    if(gs.length<5 && radiusIndex<RADII.length-1){
-      fetchOverpass(lat,lng,radiusIndex+1);
-      return;
-    }
-
-    document.getElementById('map-loading').style.display='none';
-    var top=gs.slice(0,10);
-    renderCards(top);
-    top.forEach(function(g,i){addMarker(g,i);});
-
-    if(top.length>0){
-      var bounds=new google.maps.LatLngBounds();
-      bounds.extend({lat:lat,lng:lng});
-      top.forEach(function(g){bounds.extend({lat:g.lat,lng:g.lng});});
-      map.fitBounds(bounds);
-    }
-  })
-  .catch(function(err){
-    console.warn('[DECOR] Overpass fallback failed ('+err+'). Loading realistic sample garages for demonstration...');
-    fetchSampleGarages(lat, lng);
-  });
-}
-
 function fetchSampleGarages(lat, lng) {
   document.getElementById('map-status').textContent = 'Displaying sample nearby garages (Demonstration Mode)';
   document.getElementById('radius-label').textContent = 'RADIUS: 10 KM (SAMPLE)';
@@ -367,7 +235,44 @@ function fetchSampleGarages(lat, lng) {
     map.fitBounds(bounds);
   }
 }
-  });
+
+function fetchPlaces(lat, lng) {
+  document.getElementById('map-status').textContent = 'Searching for nearby garages...';
+  
+  fetch('/api/nearby-garages/?lat=' + lat + '&lng=' + lng)
+    .then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(function(data) {
+      var gs = data.garages || [];
+      var radiusKm = (data.radius_used || 5000) / 1000;
+      document.getElementById('radius-label').textContent = 'RADIUS: ' + radiusKm + ' KM';
+      
+      document.getElementById('map-loading').style.display = 'none';
+      
+      if (!gs.length) {
+        console.log('[DECOR] No real garages returned, falling back to dynamic samples...');
+        fetchSampleGarages(lat, lng);
+        return;
+      }
+      
+      var top = gs.slice(0, 10);
+      renderCards(top);
+      top.forEach(function(g, i) { addMarker(g, i); });
+      
+      // Auto-fit map to show all markers
+      if (top.length > 0) {
+        var bounds = new google.maps.LatLngBounds();
+        bounds.extend({lat: lat, lng: lng});
+        top.forEach(function(g) { bounds.extend({lat: g.lat, lng: g.lng}); });
+        map.fitBounds(bounds);
+      }
+    })
+    .catch(function(err) {
+      console.warn('[DECOR] Backend search failed (' + err + '). Loading sample garages...');
+      fetchSampleGarages(lat, lng);
+    });
 }
 
 function initMap(){
@@ -417,8 +322,8 @@ function initMap(){
 
       document.getElementById('location-label').textContent='LOCATION ACTIVE';
 
-      // Now fetch garages using live coordinates — start at 5 km, expand if needed
-      fetchPlaces(userLat,userLng,0);
+      // Now fetch garages using live coordinates
+      fetchPlaces(userLat,userLng);
     },
     function(err){
       document.getElementById('map-loading').style.display='none';

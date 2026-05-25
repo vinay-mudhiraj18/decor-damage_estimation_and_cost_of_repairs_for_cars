@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('register/', views.register_view, name='register'),
     path('garages/', views.nearby_garages, name='nearby_garages'),
+    path('api/nearby-garages/', views.nearby_garages_api, name='nearby_garages_api'),
 ]
