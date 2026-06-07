@@ -357,7 +357,7 @@ def nearby_garages_api(request):
     radii = [5000, 10000, 25000, 50000, 100000]
     
     for radius in radii:
-        q = f"""[out:json][timeout:5];
+        q = f"""[out:json][timeout:10];
         (
           node["amenity"="car_repair"](around:{radius},{lat},{lng});
           way["amenity"="car_repair"](around:{radius},{lat},{lng});
@@ -377,7 +377,7 @@ def nearby_garages_api(request):
                     data=data,
                     headers={'User-Agent': 'DECOR_CarRepairLocator/1.0 (vinay-mudhiraj18/decor)'}
                 )
-                with urllib.request.urlopen(req, timeout=2.5) as response:
+                with urllib.request.urlopen(req, timeout=8.0) as response:
                     if response.status == 200:
                         raw_data = response.read().decode('utf-8')
                         result_json = json.loads(raw_data)
