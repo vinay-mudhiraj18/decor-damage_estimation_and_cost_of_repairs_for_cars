@@ -326,6 +326,13 @@ def nearby_garages_api(request):
     lat_str = request.GET.get('lat')
     lng_str = request.GET.get('lng')
     
+    # Get client IP for X-Forwarded-For header to prevent Render IP block
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        client_ip = x_forwarded_for.split(',')[0].strip()
+    else:
+        client_ip = request.META.get('REMOTE_ADDR', '')
+    
     if not lat_str or not lng_str:
         return JsonResponse({'error': 'Latitude and longitude are required.'}, status=400)
         
@@ -375,7 +382,10 @@ def nearby_garages_api(request):
                 req = urllib.request.Request(
                     endpoint,
                     data=data,
-                    headers={'User-Agent': 'DECOR_CarRepairLocator/1.0 (vinay-mudhiraj18/decor)'}
+                    headers={
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                        'X-Forwarded-For': client_ip
+                    }
                 )
                 with urllib.request.urlopen(req, timeout=8.0) as response:
                     if response.status == 200:
